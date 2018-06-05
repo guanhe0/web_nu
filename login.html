@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+<meta http-equiv="expires" content="Thu, 1 Jan 1970 00:00:01 GMT" />
+<title>IPCamera Login</title>
+<script type="text/javascript" src="jquery/jquery.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.widget.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.mouse.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.position.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jq.ui.button.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.button.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.resizable.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.draggable.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.dialog.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.effect.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.effect-fade.js"></script>
+<script type="text/javascript" src="jquery/jquery.json-2.4.min.js"></script>
+<script type="text/javascript" src="jquery/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="jquery/jquery.bgiframe.min.js"></script>
+
+<script type="text/javascript" src="js/general.js"></script>
+<script type="text/javascript" src="js/cmd.js"></script>
+<script type="text/javascript" src="js/login.js"></script>
+<link href="themes/ui-theme.css" rel="stylesheet" />
+
+</head>
+
+<body class="ui-helper-reset">
+	<div class="loading">
+		<img src="themes/images/loading.gif">
+	</div>
+	<div class="body hide">
+		<div class="layer">
+			<div class="container">
+				<div class="top">
+					<img src="themes/images/logo.png">
+					<div class="language">
+						<label><script>dwn("Language")</script></label>
+						<ul class="language_menu hide">
+						</ul>
+					</div>
+				</div>
+				<div class="bottom">
+					<div class="line">
+						<div class="desc">
+							<label><script>dwn(IDC_LOGIN_USERNAME);</script></label>
+						</div>
+						<div class="func">
+							<input id="username" type="text" value="admin" class="sysinput">
+						</div>
+					</div>
+					<div class="line">
+						<div class="desc">
+							<label><script>dwn(IDC_LOGIN_PASSWD);</script></label>
+						</div>
+						<div class="func">
+							<input id="password" type="password" class="sysinput">
+						</div>
+					</div>
+					<div class="line">
+						<div class="ocxlink">
+							<script>dwn(IDC_LOGIN_DOWNLOAD);//下载</script><a href="IpcOcxSetup.exe" style="color:#0b93d5;"><script>dwn(IDC_LOGIN_TIPMSG2);//插件</script></a>
+						</div>
+						<button class="login"><script>dwn(IDC_LOGIN_LOGIN);</script></button>
+					</div>
+				</div>
+			</div>
+			<div class="activex_link hide">
+				<script>dwn(IDC_LOGIN_TIPMSG1);//检测到插件未安装, 下载</script><a href="IPCameraOCXSetup.exe" style="color:#0b93d5;"><script>dwn(IDC_LOGIN_TIPMSG2);//控件</script></a>
+			</div>
+		</div>
+	</div>
+	<div class="hide clear" id="msgLoginFail">
+		<span><script>dwn(IDC_LOGIN_LOGINFAIL);//登录失败</script></span>
+	</div>
+<!--	<object id="IPCameraCheck" name="IPCameraCheck" classid=clsid:96BA7EF6-8389-430E-9806-36A3D30696B5 width="1" height="1"></object>-->
+</body>
+
+</html>

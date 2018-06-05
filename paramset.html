@@ -1,0 +1,2664 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=9;IE=8;IE=EmulateIE7"/>
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+<meta http-equiv="expires" content="Thu, 1 Jan 1970 00:00:01 GMT" />
+<script type="text/javascript" src="jquery/jquery.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.core.min.js"></script>
+
+<script type="text/javascript" src="uiWidgets/jquery.ui.widget.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.mouse.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.position.min.js"></script>
+
+
+<script type="text/javascript" src="uiWidgets/jq.ui.button.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.button.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.dialog.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.slider.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.tabs.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.progressbar.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.datetimepicker.min.js"></script>
+<script type="text/javascript" src="jquery/jquery.bgiframe.min.js"></script>
+
+<script type="text/javascript" src="jquery/jquery.json-2.4.min.js"></script>
+<script type="text/javascript" src="jquery/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="jquery/jquery.timer.min.js"></script>
+
+<script type="text/javascript" src="jquery/js.ctrl.video.js"></script>
+<script type="text/javascript" src="jquery/excanvas.compiled.js"></script>
+<script type="text/javascript" src="jquery/draw_div.js"></script>
+<script type="text/javascript" src="jquery/drag_draw.js"></script>
+
+<script type="text/javascript" src="js/base_info.js"></script>
+
+<script type="text/javascript" src="js/sys_serial.js"></script>
+<script type="text/javascript" src="js/user_manage.js"></script>
+<script type="text/javascript" src="js/sd_status.js"></script>
+
+<script type="text/javascript" src="js/front_record.js"></script>
+
+<script type="text/javascript" src="js/video_chn.js"></script>
+<script type="text/javascript" src="js/video_para.js"></script>
+<script type="text/javascript" src="js/shot_param.js"></script>
+<script type="text/javascript" src="js/video_cover.js"></script>
+
+<script type="text/javascript" src="js/ethernet.js"></script>
+<script type="text/javascript" src="js/ddns.js"></script>
+<script type="text/javascript" src="js/net_port.js"></script>
+<script type="text/javascript" src="js/28181_set.js"></script>
+<script type="text/javascript" src="js/protocol.js"></script>
+<script type="text/javascript" src="js/tcl_set.js"></script>
+<script type="text/javascript" src="js/3g_4g.js"></script>
+
+<script type="text/javascript" src="js/alarm_conf.js"></script>
+<script type="text/javascript" src="js/linkage_set.js"></script>
+<script type="text/javascript" src="js/io_alarm.js"></script>
+<script type="text/javascript" src="js/md_alarm.js"></script>
+
+<script type="text/javascript" src="js/local.js"></script>
+
+
+
+
+
+
+<script type="text/javascript" src="js/paramset.js"></script>
+<script type="text/javascript" src="js/general.js"></script>
+<script type="text/javascript" src="js/cmd.js"></script>
+<script type="text/javascript" src="js/param_player.js"></script>
+<script type="text/javascript" src="js/time_set.js"></script>
+<style>
+	body{ margin:0;}
+</style>
+<link href="themes/ui-theme.css" rel="stylesheet" />
+<link href="themes/jquery.datetimepicker.css" rel="stylesheet" />
+
+<title>IPCamera</title>
+</head>
+<script language = "javascript" for = "IPCamera" event = "FireEvent_VideoCoverArea(lWndNo,lAreaIndex,lLeft,lTop,lRight,lBottom)">
+</script>
+<body class="ui-helper-reset">
+	<div class="loading">
+		<img src="themes/images/loading.gif">
+	</div>	
+	
+	<div class = "pm_body body">
+		<div class = "header">
+			<div class = "headcontain">
+				<div class = "containleft">
+					<div class = "logo">
+						<img src="themes/images/logo.png">
+					</div>
+				</div>
+				<div class = "containright contain-live">
+					<div class="left" style = "margin-left:-88px;width:200px;">
+						<div class="info device">
+							<span id="deviceInfo"></span>
+						</div>
+						<div class="info user">
+							<span id="deviceUser"></span>
+						</div>
+					</div>
+					<div class="right ul-live">
+						<ul class="ui-helper-reset pm_header_right" id="shortcutmenu" >
+							<li>
+								<span class = "playlive" ><script>dwn(IDC_LIVE_VIDEO);</script></span>
+							</li>
+							<li>
+								<span class="logout"><script>dwn(IDC_LIVE_EXIT);</script></span>
+							</li>
+						</ul>
+					</div>
+					<div class="clear"></div>
+				</div>
+				 <div class="clear"></div>
+			</div>
+		</div>
+		<div class="hide clear" id="msgLogout">
+			<span><script>dwn(IDC_GENERAL_EXIT);</script></span>
+		</div>
+		
+		<div id = "pm_content">
+			<div id = "pm_left">
+				<div class="left" style = "width:100%;">
+					<h3 class="ui-state-default text_align_center">
+						<script>dwn(IDC_SETTING_DIALOG_SYSTEM);</script>
+					</h3>					
+					<ul class = "pm_ul hide">
+						<li data-menu="base_info">
+							<script>dwn(IDC_SETTING_DIALOG_SYS_BASEINFO);</script>
+						</li>
+						<li data-menu="user_manage">
+							<script>dwn(IDC_SETTING_DIALOG_SYS_USRMANAGE);</script>
+						</li>
+						<li data-menu="sys_serial">
+							<!--
+							<script>dwn(IDC_SETTING_DIALOG_SYS_SERIAL);</script>
+							-->
+							<script>dwn(IDC_LIVE_TAB_PTZ);</script>
+						</li>
+						<li data-menu="frontend_record">
+							<script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD);</script>
+						</li>
+						<li data-menu="time_set">
+							<script>dwn(IDC_SETTING_DIALOG_SYS_TIMEZONE);</script>
+						</li>
+						<li data-menu="sd_status">
+							<script>dwn(IDC_SETTING_DIALOG_SYS_SDCARDINFO);</script>
+						</li>
+					</ul>
+					<h3 class="ui-state-default text_align_center">
+						<script>dwn(IDC_SETTING_DIALOG_AV);</script>
+					</h3>					
+					<ul class="pm_ul hide">
+						<li data-menu="video_channel_set">
+							<script>dwn(IDC_SETTING_DIALOG_AV_CHANNEL);</script>
+						</li>
+						<li data-menu="video_param">
+							<script>dwn(IDC_SETTING_DIALOG_AV_PARA);</script>
+						</li>
+						<li data-menu="video_cover">
+							<script>dwn(IDC_SETTING_DIALOG_AV_COVER);</script>
+						</li>
+						<li data-menu="shot_param">
+							<script>dwn(IDC_SETTING_DIALOG_SHOT_PARAM);</script>
+						</li>						
+					</ul>
+					<h3 class="ui-state-default text_align_center">
+						<script>dwn(IDC_SETTING_DIALOG_NETWORK);</script>
+					</h3>					
+					<ul class="pm_ul hide">
+						<li data-menu="ethernet_set">
+							<script>dwn(IDC_SETTING_DIALOG_NET_ETHERNET);</script>
+						</li>
+						<li data-menu="ddns_set">
+							<script>dwn(IDC_SETTING_DIALOG_NET_DDNS);</script>
+						</li>
+						<li data-menu="net_port_set">
+							<script>dwn(IDC_SETTING_DIALOG_NET_PORT);</script>
+						</li>
+						<li data-menu="protocol">
+							<script>dwn(IDC_SETTING_DIALOG_PROTOCOL);</script>
+						</li>
+						<li data-menu="3g_4g" style = "display:none;">
+							<script>dwn(IDC_SETTING_3G_4G);</script>
+						</li>						
+					</ul>
+					<h3 class="ui-state-default text_align_center">
+						<script>dwn(IDC_SETTING_DIALOG_ALARM);</script>
+					</h3>					
+					<ul class="pm_ul hide">
+						<li data-menu="alarm_set">
+							<script>dwn(IDC_SETTING_DIALOG_ALARM_SET);</script>
+						</li>
+						<li data-menu="linkage_set">
+							<script>dwn(IDC_SETTING_DIALOG_ALARM_LINK);</script>
+						</li>
+						<li data-menu="io_alarm">
+							<script>dwn(IDC_SETTING_DIALOG_ALARM_IO);</script>
+						</li>
+						<li data-menu="md_alarm">
+							<script>dwn(IDC_SETTING_DIALOG_ALARM_MD);</script>
+						</li>						
+					</ul>
+					<h3 class="ui-state-default text_align_center">
+						<script>dwn(IDC_SETTING_DIALOG_LOCAL);</script>
+					</h3>
+					<ul class="pm_ul hide">
+						<li data-menu="local_set">
+							<script>dwn(IDC_SETTING_DIALOG_LOCAL_SET);</script>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<div id = "pm_right" class = "right">
+				<!--
+				<iframe name = "pm_right_iframe" id = "pm_right_iframe" frameborder="0" style = "width:100%;height:100%;">
+				</iframe>
+				-->
+				<div class="hide base_info">
+					<div class="tabs">
+						<ul>
+							<li>
+								<a href="#sysinfo"><script>dwn(IDC_SETTING_DIALOG_SYS_BASEINFO_INFO);</script></a>
+							</li>
+							<li>
+								<a href="#sysoperate"><script>dwn(IDC_SETTING_DIALOG_SYS_BASEINFO_OPERATION);</script></a>
+							</li>
+							<li>
+								<a href="#sysupgrade"><script>dwn(IDC_SETTING_DIALOG_SYS_BASEINFO_UPDATE);</script></a>
+							</li>
+							<li>
+								<a href="#logquery"><script>dwn(IDC_SETTING_DIALOG_LOG_QUERY);</script></a>
+							</li>						
+						</ul>
+						<div id="sysinfo">
+							<div id="info">
+								<div class="sysinfo_row">
+									<div class="sysinfo_desc">
+										<label><script>dwn(IDC_SETTING_DIALOG_SYS_BASEINFO_DEVNAME);</script></label>
+									</div>
+									<div class="sysinfo_data">
+										<input class="sysinput" id="device_name" type="text" maxlength = 20/>
+									</div>
+								</div>
+								<div class="sysinfo_row">
+									<div class="sysinfo_desc">
+										<label><script>dwn(IDC_SETTING_DIALOG_SYS_BASEINFO_DEVNUM);</script></label>
+									</div>
+									<div class="sysinfo_data">
+										<input class="sysinput sysinput_disable" ReadOnly="true" id="device_serialNum" type="text" />
+									</div>
+								</div>
+								<div class="sysinfo_row">
+									<div class="sysinfo_desc">
+										<label><script>dwn(IDC_SETTING_DIALOG_SYS_BASEINFO_HARDWAREVER);</script></label>
+									</div>
+									<div class="sysinfo_data">
+										<input class="sysinput sysinput_disable" ReadOnly="true" id="hardware_version" type="text" />
+									</div>
+								</div>
+								<div class="sysinfo_row">
+									<div class="sysinfo_desc">
+										<label><script>dwn(IDC_SETTING_DIALOG_SYS_BASEINFO_UBOOTVER);</script></label>
+									</div>
+									<div class="sysinfo_data">
+										<input class="sysinput sysinput_disable" ReadOnly="true" id="uboot_version" type="text" />
+									</div>
+								</div>
+								<div class="sysinfo_row">
+									<div class="sysinfo_desc">
+										<label><script>dwn(IDC_SETTING_DIALOG_SYS_BASEINFO_KERNELVER);</script></label>
+									</div>
+									<div class="sysinfo_data">
+										<input class="sysinput sysinput_disable" ReadOnly="true" id="kernel_version" type="text" />
+									</div>
+								</div>
+								<div class="sysinfo_row">
+									<div class="sysinfo_desc">
+										<label><script>dwn(IDC_SETTING_DIALOG_SYS_BASEINFO_APPVER);</script></label>
+									</div>
+									<div class="sysinfo_data">
+										<input class="sysinput sysinput_disable" ReadOnly="true" id="server_version" type="text" />
+									</div>
+								</div>
+								<div class="sysinfo_row">
+									<div class="sysinfo_desc">
+										<label><script>dwn(IDC_SETTING_DIALOG_SYS_BASEINFO_PTZVER);</script></label>
+									</div>
+									<div class="sysinfo_data">
+										<input class="sysinput sysinput_disable" ReadOnly="true" id="ptz_version" type="text" value=""/>
+									</div>
+								</div>
+								<div class="sysinfo_row">
+									<div class="sysinfo_desc">
+										<label><script>dwn(IDC_SETTING_DIALOG_SYS_BASEINFO_OCXVER);</script></label>
+									</div>
+									<div class="sysinfo_data">
+										<input class="sysinput sysinput_disable" ReadOnly="true" id="ocx_version" type="text" />
+									</div>
+								</div>						
+							</div>
+						</div>
+						<div id="sysoperate">
+							<div id="info">
+								<div class="sysinfo_row">
+									<div class="sysinfo_desc">
+										<label><script>dwn(IDC_SETTING_DIALOG_SYS_BASEINFO_RESET);</script></label>
+									</div>
+									<div class="sysinfo_data">
+										<button id="reset_default" type="button">
+											<script>dwn(IDC_SETTING_DIALOG_SYS_BASEINFO_RESET_CONF);</script>
+										</button>
+									</div>
+								</div>
+								<div class="sysinfo_row">
+									<div class="sysinfo_desc">
+										<label><script>dwn(IDC_SETTING_DIALOG_SYS_BASEINFO_REBOOT);</script></label>
+									</div>
+									<div class="sysinfo_data">
+										<button id="reboot" type="button"><script>dwn(IDC_SETTING_DIALOG_SYS_BASEINFO_REBOOT1);</script></button>
+									</div>
+								</div>
+
+								<div id="operate_msg" class="hide">
+									<div class="sysinfo_row" style="width:560px;">
+										<div id="operate_progress" class="progress">
+										</div>
+										<div class="operate_progress_label progress_label">
+										</div>
+									</div>
+								</div>
+							</div>
+							
+							<div class = "tittle">
+								<!--<label><script>dwn(IDC_PARAMS_INPUT_OUTPUT);</script></label>-->
+							</div>
+							<br>
+							<div class = "info">
+								<div>
+								<label><script>dwn(IDC_PARAMS_TYPE);</script></label>
+								<input type = "radio" name = "paramtype" onclick = "setparamtype(this.value)" value = "0" checked = "true"/>
+								<label><script>dwn(IDC_PARAMS_VIDEO);</script></label>
+								<input type = "radio" name = "paramtype" onclick = "setparamtype(this.value)" value = "1"/>
+								<label><script>dwn(IDC_PARAMS_ALARM);</script></label>
+								<input type = "radio" name = "paramtype" onclick = "setparamtype(this.value)" value = "2"/>
+								<label><script>dwn(IDC_PARAMS_PIC);</script></label>
+								<input type = "radio" name = "paramtype" onclick = "setparamtype(this.value)" value = "3"/>
+								<label><script>dwn(IDC_PARAMS_PTZ);</script></label>
+								<input type = "radio" name = "paramtype" onclick = "setparamtype(this.value)" value = "4"/>
+								<label><script>dwn(IDC_PARAMS_SYS);</script></label>
+								<input type = "radio" name = "paramtype" onclick = "setparamtype(this.value)" value = "5"/>
+								<label><script>dwn(IDC_PARAMS_USER);</script></label>
+								<input type = "radio" name = "paramtype" onclick = "setparamtype(this.value)" value = "6"/>
+								<label><script>dwn(IDC_PARAMS_REOCRD);</script></label>
+								</div>
+								<br>
+								<div style = "display:block;">
+									<label><script>dwn(IDC_PARAMS_INPUT);</script></label>
+								</div>
+								<br>
+								<iframe name="dd" id='ddiframe' class="hide">
+								</iframe>							
+								<div  style = "display:block;">
+									<label><script>dwn(IDC_CONFIG_FILE);</script></label>
+									<form action="/webs/configCfg" method="post" target="dd" enctype="multipart/form-data" id="ddfrmUpdate">								
+									<br/>
+									<input id = "configure_file" name = "configCfg" class = "" type = "file" size = "38" value = "">
+									</form>		
+									<br/>
+									<input id = "bt_configure" class = "" value = "参数导入" type = "button" onclick = "InputConfFile();">								
+								</div>
+								<br>
+								<div style = "display:block;">
+									<label><script>dwn(IDC_PARAMS_OUTPUT);</script></label>
+								</div>
+								<br>
+								<div  style = "display:block;">
+									<input id = "bt_configure1" class = "" onclick = "DownLoadConf();" type = "button" value = "参数导出">
+								</div>
+							</div>
+						</div>
+						<div id="sysupgrade">
+							<div id="info">
+								<div class="sysinfo_row" style="height:25px;">
+									<div class="sysinfo_desc" style="height:25px;line-height:25px;">
+										<script>dwn(IDC_SETTING_DIALOG_SYS_BASEINFO_FILEPATH);</script>
+									</div>
+									<div class="sysinfo_data" style="height:25px;">
+										<iframe name="aa" id='upiframe' class="hide">
+										</iframe>
+										<div class="data_desc" style="height:25px;">
+											<form action="/webs/updateCfg" method="post" target="aa" enctype="multipart/form-data" id="frmUpdate">
+											<!--	<input type="file" id="fileurl" name="fileurl" value = "san..">-->
+												
+												<input type = "text" name = "textfield" id = "textfield" class = "filetext" disabled="true">
+												<input type = "button" id = "scanbutton" class = "filebtn" value = "" style="vertical-align:middle"/>
+												<input type="file" name="fileField" class="stfile" id="fileField" size="28" onchange="document.getElementById('textfield').value=this.value"/>
+												
+											</form>
+										</div>
+										<div class="data_data" style="height:25px;">
+											<button id="upgrade_btn"><script>dwn(IDC_GENERAL_OK);</script></button>
+										</div>
+									</div>
+								</div>
+								<div id="update_msg" class="update_msg hide">
+									<div class="sysinfo_row" style="width:560px;">
+										<div id="update_progress" class="progress">
+										</div>
+										<div class="update_progress_label progress_label">
+										</div>
+									</div>
+									<div class="sysinfo_row hide" >
+										<div class="update_detail"></div>
+									</div>
+								</div>
+							</div>
+						</div>
+				<!---		
+				<div class="hide clear" id="logquery">
+					<div style="padding:10px;">
+						<table class="thead" cellpadding="0" cellspacing="0" border="0" width="100%">
+							<thead>
+								<tr>
+									<th style="width:100px;"><script>dwn(IDC_LIVE_ALARM_TYPE);//报警类型</script></th><th style="width:200px;"><script>dwn(IDC_LIVE_ALARM_TIME);//报警时间</script></th>
+								</tr>
+							</thead>
+						</table>
+						<div class="tbody">
+							<table cellpadding="0" cellspacing="0" border="0" width="76%" style="max-height:100px;" id="alarm_msg_table">
+							<tbody>
+							</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+				-->
+						<div class="log_query" id="logquery">
+						<!---------qwuery params -------------->
+							<!---<div id="log_query_right">--->
+							
+								<!---type------>
+								<div class="log_query_head">
+									<div class="label_query_type">
+										<label style = "display:inline-block;width:100px;"><script>dwn(IDC_LIVE_LOG_QUERY_TYPE);</script></label>
+									</div>								
+									
+									<div class = "select_type_log">
+										
+										<select id="MajorType" class = "sysselect_log timeinput"  name="MajorType">
+										<option id="MajorTypeOpt1" name="MajorTypeOpt1" value="0"><script>dwn(IDC_SETTING_DIALOG_SYS_LOG_QUERY_TYPE_ALL);</script></option>
+										<option id="MajorTypeOpt2" name="MajorTypeOpt2" value="1"><script>dwn(IDC_SETTING_DIALOG_SYS_LOG_QUERY_TYPE_ALARM);</script></option>
+										<option id="MajorTypeOpt3" name="Exception" value="2"><script>dwn(IDC_SETTING_DIALOG_SYS_LOG_QUERY_TYPE_EXCEPTION);</script></option>
+										<option id="MajorTypeOpt4" name="MajorTypeOpt4" value="3"><script>dwn(IDC_SETTING_DIALOG_SYS_LOG_QUERY_TYPE_OPERATION);</script></option>
+										<option id="MajorTypeOpt5" name="Infomation" value="4"><script>dwn(IDC_SETTING_DIALOG_SYS_LOG_QUERY_TYPE_INFORMATION);</script></option>
+										</select>
+										
+									</div>
+								
+								</div>
+								
+								<!---begin time-->
+								<div class = "log_query_begin_time">
+									<div class="label_begin_time1">
+									<label><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_BEGINTIME1);</script></label>
+									</div>
+									<div id ="log_begin_time">
+										<input type="text" id="log_input_begin_time" class="sysinput timeinput">
+										
+										<select id="log_input_begin_hour" class = "sysselect timeinput">
+										</select>
+										<label class="log_label"><script>dwn(IDC_GENERAL_HOUR_H);</script></label>
+										
+										<select id="log_input_begin_minute" class = "sysselect timeinput">
+										</select>
+										<label class="log_label"><script>dwn(IDC_GENERAL_MINUTE_M);</script></label>
+										
+										<select id="log_input_begin_second" class = "sysselect timeinput">
+										</select>
+										<label class="log_label"><script>dwn(IDC_GENERAL_SECOND_S);</script></label>
+									</div>								
+								</div>
+								
+								<!---end time-->
+								<div class="log_query_end_time">
+									<div class="label_end_time">
+									<label><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_ENDTIME1);</script></label>
+									</div>
+									<div id="log_end_time">
+										<input type="text" id="log_input_end_time" class="sysinput timeinput">
+										<select id="log_input_end_hour" class = "sysselect timeinput">
+										</select>
+										<label class="log_label"><script>dwn(IDC_GENERAL_HOUR_H);</script></label>
+										
+										<select id="log_input_end_minute" class = "sysselect timeinput">
+										</select>
+										<label class="log_label"><script>dwn(IDC_GENERAL_MINUTE_M);</script></label>
+										
+										<select id="log_input_end_second" class = "sysselect timeinput">
+										</select>
+										<label class="log_label"><script>dwn(IDC_GENERAL_SECOND_S);</script></label>
+										
+										<button id="log_query" class="sysinfo_data_log"><script>dwn(IDC_SETTING_DIALOG_SYS_LOG_QUERY);</script></button>									
+										<button id = "log_download" class = "sysinfo_data_log ui-button ui-widget ui-state-default ui-corner-all" onclick = 'DownLog();'><script>dwn(IDC_LOG_DOWNLOAD);</script></button>
+									</div>								
+								</div>
+								
+								
+								
+								<br>
+
+								
+							<!---</div>----->
+						<!----------------------->
+
+						
+							<div id = "log_query_left"><!--////////LEFT---style="padding:10px; width:76%"-->
+								
+								<table class="thead" cellpadding="0" cellspacing="0" border="0" width="100%">
+									<thead>
+										<tr>
+											<th style="width:113px;" id = "log_time"><script>dwn(IDC_LIVE_OPERATE_TIME);//操作时间</script></th>
+											<th style="width:47px;" id = "log_type"><script>dwn(IDC_LIVE_OPERATE_TYPE);//操作类型</script></th>
+											<th style="width:149px;" id = "log_content"><script>dwn(IDC_LIVE_OPERATE_CONTENT);//操作内容</script></th>
+										</tr>
+									</thead>
+								</table>
+								<div class="tbody" >
+									<table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-height:100px;" id="log_query_table">
+									
+									<tbody>
+									</tbody>
+									
+									</table>
+								</div>							
+							</div>
+
+							
+
+						
+
+							
+						</div>
+
+
+
+
+
+				
+					</div>
+			</div>
+			<!-------------------------------base info----------------------------->
+			<div class="hide user_manage">
+				<div class="tittle">
+					<label><script>dwn(IDC_SETTING_DIALOG_SYS_USRMANAGE1);</script></label>
+				</div>
+				<div class="user_mng_group">
+					<table id="userstable" cellpadding="0" cellspacing="0" border='1'>
+						<tr class="title">
+							<td><script>dwn(IDC_SETTING_DIALOG_SYS_USRMANAGE_TITLE_USERNAME);</script></td>
+							<td><script>dwn(IDC_SETTING_DIALOG_SYS_USRMANAGE_TITLE_USERGROUP);</script></td>
+						</tr>
+					</table>
+					<table id="user_tab" class="hide">
+						<tr>
+							<td style="text-align: right;">
+								<label><script>dwn(IDC_SETTING_DIALOG_SYS_USRMANAGE_USERNAME);</script></label>
+							</td>
+							<td style="text-align: left;">
+								<input type="text" id="user_name" class="sysinput">
+							</td>
+						</tr>
+						<tr>
+							<td style="text-align: right;">
+								<label><script>dwn(IDC_SETTING_DIALOG_SYS_USRMANAGE_USERGROUP);</script></label>
+							</td>
+							<td style="text-align: left;">
+								<select id="user_group" class="sysselect">
+									<option value="0">admin</option>
+									<option value="1">operate</option>
+									<option value="2">user</option>
+								</select>
+							</td>
+						</tr>
+					</table>
+					<table class="table_btn" style="margin-top:5px;">
+						<tr>
+							<td style="text-align: right; width: 130px;">
+								<button id="add_user_btn"><script>dwn(IDC_SETTING_DIALOG_SYS_USRMANAGE_ADD);</script></button>
+							</td>
+							<td style="text-align: right; width: 50px;">
+								<button id="modify_passwd_btn"><script>dwn(IDC_SETTING_DIALOG_SYS_USRMANAGE_MODIFY);</script></button>
+							</td>
+							<td style="text-align: left; width: 100px;">
+								<button id="del_user_btn"><script>dwn(IDC_SETTING_DIALOG_SYS_USRMANAGE_DEL);</script></button>
+							</td>
+						</tr>
+					</table>
+					<div class="hide clear" id="adduserdialog">
+						<div class="add_user_group">
+							<div class="user_group_desc">
+								<label><script>dwn(IDC_SETTING_DIALOG_SYS_USRMANAGE_USERNAME);</script></label>
+							</div>
+							<div class="user_group_data">
+								<input type="text" maxlength="10" id="dialog_user_name" class="sysinput">
+							</div>
+						</div>
+						<div class="add_user_group">
+							<div class="user_group_desc">
+								<label><script>dwn(IDC_SETTING_DIALOG_SYS_USRMANAGE_USERPASSWD);</script></label>
+							</div>
+							<div class="user_group_data">
+								<input type="password" maxlength="10" id="dialog_user_password" class="sysinput">
+							</div>
+						</div>
+						<div class="add_user_group">
+							<div class="user_group_desc">
+								<label><script>dwn(IDC_SETTING_DIALOG_SYS_USRMANAGE_USERGROUP);</script></label>
+							</div>
+							<div class="user_group_data">
+								<select id="dialog_user_group" class="sysselect">
+									<option value="0">admin</option>
+									<option value="1">operate</option>
+									<option value="2">user</option>
+								</select>
+							</div>
+						</div>
+						<div class="add_user_group">
+							<div class="save_msg" id="show_save_msg">
+							</div>
+						</div>
+					</div>
+					<div class="hide clear" id="msgdeluser">
+						<span><script>dwn(IDC_SETTING_DIALOG_SYS_USRMANAGE_DEL_SUCCESS);</script></span>
+					</div>
+					<div class="hide clear" id="msgdeluser_one">
+						<span style="font-size:12px;"><script>dwn(IDC_SETTING_DIALOG_SYS_USRMANAGE_DEL_MSG);//至少保留一个admin用户</script></span>
+					</div>
+					<div class="hide clear" id="modifyuserdialog">
+						<div class="add_user_group">
+							<div class="user_group_desc">
+								<label><script>dwn(IDC_SETTING_DIALOG_SYS_USRMANAGE_USERNAME);</script></label>
+							</div>
+							<div class="user_group_data">
+								<input type="text" id="dialog_mdy_user_name" class="sysinput">
+							</div>
+						</div>
+						<div class="add_user_group">
+							<div class="user_group_desc">
+								<label><script>dwn(IDC_SETTING_DIALOG_SYS_USRMANAGE_USERPASSWD);</script></label>
+							</div>
+							<div class="user_group_data">
+								<input type="password" id="dialog_mdy_user_password" class="sysinput">
+							</div>
+						</div>
+						<div class="add_user_group">
+							<div class="user_group_desc">
+								<label><script>dwn(IDC_SETTING_DIALOG_SYS_USRMANAGE_CONFIRM_USERPASSWD);</script></label>
+							</div>
+							<div class="user_group_data">
+								<input type="password" id="dialog_mdy_user_confirm_password" class="sysinput">
+							</div>
+						</div>						
+						<div class="add_user_group">
+							<div class="save_msg" id="show_modify_msg">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		<!-------------------------user manager-------------------------------->
+			<div class="hide sys_serial">
+				<div class = "tabs">
+					<ul>
+						<li>
+							<a href="#serial_setting" onclick = "SetPtzPage(0);"><script>dwn(IDC_SETTING_DIALOG_SYS_SERIAL_SETTING);</script></a>
+						</li>
+						<li>
+							<a href="#ptz_setting" onclick = "SetPtzPage(1);"><script>dwn(IDC_LIVE_TAB_PTZ);</script></a>
+						</li>
+					</ul>
+					<div id = "serial_setting">
+							<div style="height:20px;margin-left: 100px;">
+								<div class="sysinfo_row">
+									<div class="sysinfo_desc">
+										<script>dwn(IDC_SETTING_DIALOG_SYS_SERIAL_ADDRESS);//球机地址:</script>
+									</div>
+									<div class="sysinfo_data">
+										<select id="selAddr" class="sysselect">
+										</select>
+									</div>
+								</div>
+								<div class="sysinfo_row">
+									<div class="sysinfo_desc">
+										<script>dwn(IDC_SETTING_DIALOG_SYS_SERIAL_BAUDRATE);//波特率:</script>
+									</div>
+									<div class="sysinfo_data">
+										<select id="selBaud" class="sysselect">
+											<option value="1200" selected="selected">1200</option>
+											<option value="1800">1800</option>
+											<option value="2400">2400</option>
+											<option value="4800">4800</option>
+											<option value="9600">9600</option>
+											<option value="19200">19200</option>
+											<option value="38400">38400</option>
+											<option value="57600">57600</option>
+											<option value="115200">115200</option>
+										</select>
+									</div>
+								</div>
+								<div class="sysinfo_row">
+									<div class="sysinfo_desc">
+										<script>dwn(IDC_SETTING_DIALOG_SYS_SERIAL_PROTOCOL);//协议类型:</script>
+									</div>
+									<div class="sysinfo_data">
+										<select id="selProtocol" class="sysselect">
+											<option value="0">CW_Protocl</option>
+											<option value="1">PELCO_D</option>
+										</select>
+									</div>
+								</div>
+							
+							</div>
+						
+					</div>	
+					<div id = "ptz_setting">
+						<div id = "info">
+							<div class = "sysinfo_row" style = "margin-left:-50px;">
+								<div class = "sysinfo_desc">
+									<label><script>dwn(IDC_PTZ_START_TIMER);</script></label>
+								</div>
+								<div class = "sysinfo_data" style = "margin-left:7px;">
+									<input id = "ptz_time_task_enable" type = "checkbox"></input>
+								</div>
+							</div>
+							<div class = "sysinfo_row" style = "margin-left:-50px;">
+								<div class = "sysinfo_desc">
+									<label><script>dwn(IDC_PTZ_TASK_RESTART_TIME);</script></label>
+								</div>
+								<div class = "sysinfo_data">
+									<input id = "ptz_task_restart_time" type = "text" class = "sysinput" style = "width:144px;"></input>
+									<label><script>dwn(IDC_GENERAL_SECOND);</script></label>
+								</div>
+							</div>
+							<div class = "sysinfo_row" style = "margin-left:-50px;">
+								<div class = "sysinfo_desc">
+									<label><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_CURSET);</script></label>
+								</div>
+								<select id = "ptz_cur_sel_week" class = "sysselect" onmousedown = "PtzSetchange(true);">
+									<option value="0"><script>dwn(IDC_GENERAL_SUNDAY);</script></option>
+									<option value="1"><script>dwn(IDC_GENERAL_MONDAY);</script></option>
+									<option value="2"><script>dwn(IDC_GENERAL_TUESDAY);</script></option>
+									<option value="3"><script>dwn(IDC_GENERAL_WEDNESDAY);</script></option>
+									<option value="4"><script>dwn(IDC_GENERAL_THURSDAY);</script></option>
+									<option value="5"><script>dwn(IDC_GENERAL_FRIDAY);</script></option>
+									<option value="6"><script>dwn(IDC_GENERAL_SATURDAY);</script></option>								
+								</select>						
+								<button id = "ptz_copy" style = "float:right;"><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_COPYTO);</script></button>
+								<button id = "ptz_add_task" style = "float:right;"><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_ADDTASK);</script></button>
+								<button id = "ptz_del_task" style = "float:right;"><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_DELTASK);</script></button>
+							</div>
+							<div class = "sysinfo_row" style = "width:100%;margin-left:-50px;">
+								<table id = "ptz_scheduling" cellpadding="0" cellspacing="0" border='1'>
+									<tr>
+										<th style = "width:34%"><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_BEGINTIME);</script></th>
+										<th style = "width:34%"><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_ENDTIME);</script></th>									
+										<th><script>dwn(IDC_PTZ_TASK_MODEL);</script></th>
+										<th><script>dwn(IDC_PTZ_TASK_MODEL_NUMBER);</script></th>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div class="hide clear" id="ptz_copy_to_dialog">
+							<div class="copy_dialog_group">
+								<label><script>dwn(IDC_GENERAL_T_SUNDAY);</script></label>
+								<input id="ptz_dialog_sunday_chk" type="checkbox">
+								<label><script>dwn(IDC_GENERAL_T_MONDAY);</script></label>
+								<input id="ptz_dialog_monday_chk" type="checkbox">
+								<label><script>dwn(IDC_GENERAL_T_TUESDAY);</script></label>
+								<input id="ptz_dialog_tuesday_chk" type="checkbox">
+								<label><script>dwn(IDC_GENERAL_T_WEDNESDAY);</script></label>
+								<input id="ptz_dialog_wednesday_chk" type="checkbox">
+							</div>
+							<div class="copy_dialog_group">
+								<label><script>dwn(IDC_GENERAL_T_THURSDAY);</script></label>
+								<input id="ptz_dialog_thursday_chk" type="checkbox">
+								<label><script>dwn(IDC_GENERAL_T_FRIDAY);</script></label>
+								<input id="ptz_dialog_friday_chk" type="checkbox">
+								<label><script>dwn(IDC_GENERAL_T_SATURDAY);</script></label>
+								<input id="ptz_dialog_saturday_chk" type="checkbox">
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+			<!-------------------------sys_serial---------------------------->
+						<div class="hide frontend_record">
+				<div class="tabs">
+					<ul>
+						<li>
+							<a href="#timer_record"><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_TITTLE_TIMERREC);</script></a>
+						</li>
+						<li>
+							<a href="#upload_record"><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_TITTLE_UPLOADRECORD);</script></a>
+						</li>
+					</ul>
+					<div id="timer_record">
+						<div id="info">
+							<div class="sysinfo_row">
+								<div class="sysinfo_desc width81">
+									<label><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_TIMERREC);</script></label>
+								</div>
+								<div class="sysinfo_data">
+									<input id="timer_record_chk" type="checkbox">
+								</div>
+							</div>
+							<div class="sysinfo_row">
+								<div class="sysinfo_desc width81" >
+									<label><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_DISKSTRATEGY);</script></label>
+								</div>
+								<div class="sysinfo_data">
+									<label><input name="rec_disk_strategy" value="0" type="radio"><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_STOPREC);</script></label> 
+									<label><input name="rec_disk_strategy" value="1" type="radio"><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_COVERREC);</script></label> 
+								</div>
+							</div>
+							<div class="sysinfo_row">
+								<div class="sysinfo_desc width81" >
+									<label><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_RECLEN);</script></label>
+								</div>
+								<div class="sysinfo_data">
+									<input type="text" id="rec_file_len" class="sysinput" onkeydown = "ValueLimited({'id':this.id,'start':1,'end':15});">
+									<label><script>dwn(IDC_GENERAL_FULL_MINUTE);</script></label>
+								</div>
+							</div>
+							<div class="sysinfo_row">
+								<div class = "sysinfo_desc width81" >
+								<label><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_CURSET);</script></label>
+								</div>
+								<select id="cur_sel_week" class="sysselect" onmousedown = "Setchange(true)">
+									<option value="0"><script>dwn(IDC_GENERAL_SUNDAY);</script></option>
+									<option value="1"><script>dwn(IDC_GENERAL_MONDAY);</script></option>
+									<option value="2"><script>dwn(IDC_GENERAL_TUESDAY);</script></option>
+									<option value="3"><script>dwn(IDC_GENERAL_WEDNESDAY);</script></option>
+									<option value="4"><script>dwn(IDC_GENERAL_THURSDAY);</script></option>
+									<option value="5"><script>dwn(IDC_GENERAL_FRIDAY);</script></option>
+									<option value="6"><script>dwn(IDC_GENERAL_SATURDAY);</script></option>
+								</select>
+								<button id="copy_to_btn"><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_COPYTO);</script></button>
+								<button id="add_task_btn"><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_ADDTASK);</script></button>
+								<button id="del_task_btn"><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_DELTASK);</script></button>
+							</div>
+							<div class="sysinfo_row">
+								<table id="rec_scheduling" cellpadding="0" cellspacing="0" border='1'>
+									<tr>
+										<th><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_BEGINTIME);</script></th>
+										<th><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_ENDTIME);</script></th>
+									</tr>
+								</table>
+							</div>
+						</div>
+						<div class="hide clear" id="copy_to_dialog">
+							<div class="copy_dialog_group">
+								<label><script>dwn(IDC_GENERAL_T_SUNDAY);</script></label>
+								<input id="dialog_sunday_chk" type="checkbox">
+								<label><script>dwn(IDC_GENERAL_T_MONDAY);</script></label>
+								<input id="dialog_monday_chk" type="checkbox">
+								<label><script>dwn(IDC_GENERAL_T_TUESDAY);</script></label>
+								<input id="dialog_tuesday_chk" type="checkbox">
+								<label><script>dwn(IDC_GENERAL_T_WEDNESDAY);</script></label>
+								<input id="dialog_wednesday_chk" type="checkbox">
+							</div>
+							<div class="copy_dialog_group">
+								<label><script>dwn(IDC_GENERAL_T_THURSDAY);</script></label>
+								<input id="dialog_thursday_chk" type="checkbox">
+								<label><script>dwn(IDC_GENERAL_T_FRIDAY);</script></label>
+								<input id="dialog_friday_chk" type="checkbox">
+								<label><script>dwn(IDC_GENERAL_T_SATURDAY);</script></label>
+								<input id="dialog_saturday_chk" type="checkbox">
+							</div>
+						</div>
+					</div>
+					<div id="upload_record">
+						<div id="info">
+							<div class="sysinfo_row">
+								<div class="sysinfo_desc">
+									<label><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_BEGINTIME1);</script></label>
+								</div>
+								<div class="sysinfo_data">
+									<input type="text" id="input_begin_time" class="sysinput timeinput">
+									<select id="input_begin_hour" class="sysselect timeinput">
+									</select>
+									<label class="desc_label"><script>dwn(IDC_GENERAL_HOUR);</script></label>
+									<select id="input_begin_minute" class="sysselect timeinput">
+									</select>
+									<label class="desc_label"><script>dwn(IDC_GENERAL_MINUTE);</script></label>
+									<select id="input_begin_second" class="sysselect timeinput">
+									</select>
+									<label class="desc_label"><script>dwn(IDC_GENERAL_SECOND);</script></label>
+								</div>
+							</div>
+							<div class="sysinfo_row">
+								<div class="sysinfo_desc">
+									<label><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_ENDTIME1);</script></label>
+								</div>
+								<div class="sysinfo_data">
+									<input type="text" id="input_end_time" class="sysinput timeinput">
+									<select id="input_end_hour" class="sysselect timeinput">
+									</select>
+									<label class="desc_label"><script>dwn(IDC_GENERAL_HOUR);</script></label>
+									<select id="input_end_minute" class="sysselect timeinput">
+									</select>
+									<label class="desc_label"><script>dwn(IDC_GENERAL_MINUTE);</script></label>
+									<select id="input_end_second" class="sysselect timeinput">
+									</select>
+									<label class="desc_label"><script>dwn(IDC_GENERAL_SECOND);</script></label>
+								</div>
+							</div>
+							<div class="sysinfo_row">
+								<div class="sysinfo_desc">
+									<label><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_FILETYPE);</script></label>
+								</div>
+								<div class="sysinfo_data">
+									<select id="filetype" class="sysselect timeinput">
+										<option value="0"><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_PIC);</script></option>
+										<option value="1"><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_RECORD);</script></option>
+									</select>
+								</div>
+							</div>
+							<div class="sysinfo_row">
+								<div class="sysinfo_desc">
+								</div>
+								<div class="sysinfo_data">
+									<button id="record_upload"><script>dwn(IDC_SETTING_DIALOG_SYS_FRONTENDRECORD_RECORDUPLOAD);</script></button>
+								</div>
+							</div>
+							<div id="upfile_contain" class="sysinfo_row hide" style="height:40px;">
+								<div id="upfile_msg" style="width:520px;height:20px;">
+								</div>
+								<div id="upfile_progress" style="width:520px;height:20px;">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		<!----------------------------frontend_record---------------------------->
+			<div class="hide time_set">
+				<div class="tittle">
+					<script>dwn(IDC_SETTING_DIALOG_SYS_TIMEZONE_TITLE_TIMESETTING);</script>
+				</div>
+				<div id="info">
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_SYS_TIMEZONE_TIMEANDDATE);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="devDate" type="text">
+							<label>--</label>
+							<input class="sysinput" id="devTime" type="text">
+							<span class="synchronous_span">
+								<input id="synchronous" type="checkbox">	
+							</span>
+							<td>
+								<script>dwn(IDC_SETTING_DIALOG_SYS_TIMEZONE_SYNCHRONOUS);</script>
+							</td>
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_SYS_TIMEZONE_TIMEZONE);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<select class="sysselect" id="timezone" onchange = "syncTimezoneTime()"></select>
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_SYS_TIMEZONE_TIMESERVER);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<!--
+							<select class="sysselect" id="clock_server">
+								<option value="clock.isc.org">clock.isc.org</option>
+							</select>
+							-->
+							<input class = "sysinput" id = "clock_server" type = "text" value = "clock.isc.org" style = "width:212px;">
+							<span class="synchronous_span">
+								<input id="auto_synchronous" type="checkbox">
+							</span>
+							<span class="autosynchronous_span">
+								<script>dwn(IDC_SETTING_DIALOG_SYS_TIMEZONE_AUTOCONNECT);</script>
+							</span>
+						</div>
+					</div>
+				</div>
+				<div class = "tittle">
+					<script>dwn(IDC_SETTING_SUMMER_TIME);</script>
+				</div>
+				<div id = "info">
+					<div class = "sysinfo_row">
+						<div class = "sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_SUMMER_TIME_ENABLE);</script></label>
+						</div>
+						<div class = "sysinfo_data">
+							<input id = "summer_time_enable" class = "sysinput_checbox" type = "checkbox">
+						</div>
+					</div>
+					<div class = "sysinfo_row">
+						<div class = "sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_BEGINTIME);</script></label>
+						</div>
+						<div class = "sysinfo_data">
+							<select id = "summer_time_start_month" class = "sysselect_one_to_four">
+							</select>
+							<select id = "summer_time_start_weekth" class = "sysselect_one_to_four">
+							</select>
+							<select id = "summer_time_start_week" class = "sysselect_one_to_four">
+							</select>
+							<select id = "summer_time_start_hour" class = "sysselect_one_to_four">
+							</select>
+							<script>
+								dwn(IDC_GENERAL_HOUR);
+							</script>
+						</div>
+					</div>
+					<div class = "sysinfo_row">
+						<div class = "sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_ENDTIME);</script></label>
+						</div>
+						<div class = "sysinfo_data">
+							<select id = "summer_time_end_month" class = "sysselect_one_to_four">
+							</select>
+							<select id = "summer_time_end_weekth" class = "sysselect_one_to_four">
+							</select>
+							<select id = "summer_time_end_week" class = "sysselect_one_to_four">
+							</select>
+							<select id = "summer_time_end_hour" class = "sysselect_one_to_four">
+							</select>
+							<script>
+								dwn(IDC_GENERAL_HOUR);
+							</script>							
+						</div>
+					</div>
+					<div class = "sysinfo_row">
+						<div class = "sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_OFFSET_TIME);</script></label>
+						</div>
+						<div class = "sysinfo_data">
+							<select id = "time_offset" class = "sysselect">
+								<option id = "time_offset_30" value = "0"><script>dwn(IDC_SETTING_DIALOG_OFFSET_TIME_30);</script></option>
+								<option id = "time_offset_60" value = "1"><script>dwn(IDC_SETTING_DIALOG_OFFSET_TIME_60);</script></option>
+								<option id = "time_offset_90" value = "2"><script>dwn(IDC_SETTING_DIALOG_OFFSET_TIME_90);</script></option>
+								<option id = "time_offset_120" value = "3"><script>dwn(IDC_SETTING_DIALOG_OFFSET_TIME_120);</script></option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!------------------------------time_set-------------------------->
+						<div class="hide sd_status">
+				<div class="tittle"><script>dwn(IDC_SETTING_DIALOG_SYS_SDCARDINFO);//SD 卡状态</script></div>
+				<div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid135" style="text-align:left; margin-left:60px; width = 400px;">
+							<label id="sd_load_status"></label>
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc" style="text-align:left; margin-left:60px; width:auto;">
+							<label><script>dwn(IDC_SETTING_DIALOG_SYS_SDSTATUS_SDFORMAT);</script></label>
+						</div>
+						<div class="sysinfo_desc" style="text-align: left;">
+							<label id="sd_format" class="sd_card_percent_val"></label>
+						</div>
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_SYS_SDSTATUS_SDTOTALVOLUME);//总容量:</script></label>
+						</div>
+						<div class="sysinfo_desc" style="text-align: left;">
+							<label id="sd_total_volume" class="sd_card_percent_val">4096MB</label>
+						</div>
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_SYS_SDSTATUS_SDUSEDVOLUME);//已使用:</script></label>
+						</div>
+						<div class="sysinfo_desc" style="text-align: left;">
+							<label id="sd_used_volume" class="sd_card_percent_val">3072MB</label>
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc" style="text-align:left; margin-left:60px; width:auto;">
+							<label><script>dwn(IDC_SETTING_DIALOG_SYS_SDSTATUS_SDPRECENT);</script></label>
+						</div>
+						
+						<div class="sysinfo_data" id="sd_card_percent" style="width: 456px;">
+							<div class="percent-bar">
+								<img class="bg" src="themes/images/process-bar-bg.png"/>
+								<img class="front" src="themes/images/process-bar-front.png"/>
+							</div>
+						</div>
+						
+						<div class="sysinfo_desc" style="text-align: left; width:auto;">
+							<label id="sd_card_percent_val">0%</label>
+						</div>
+					</div>
+					
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc" style="text-align:left; margin-left:60px;">
+							<button id="btn_sdcard_format" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" type="button"><span class="ui-button-text"><script>dwn(IDC_SETTING_DIALOG_SYS_SDSTATUS_FORMAT);//格式化</script></span></button>
+						</div>
+						<div id="sd_card_format_text" class="sysinfo_data hide" style="padding-left: 20px; line-height: 20px;">
+							<script>dwn(IDC_SETTING_DIALOG_SYS_SDSTATUS_FORMATING);//正在格式化...</script>
+						</div>
+					</div>
+				</div>
+			</div>
+		<!-----------------------sd_status--------------------->
+			<div class="hide video_channel_set">
+				<div class="master_stream">
+					<div class="tittle">
+						<script>dwn(IDC_SETTING_DIALOG_AV_TITTLE_MASTER);</script>
+					</div>
+					<div class="video_row">
+						<div class="video_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_RESOLUTION);</script></label>
+						</div>
+						<div class="video_data">
+							<select id="m_videoSize" onchange = "mVideoSizeChange(this.value)" class="sysselect">
+								<option value="2">320 x 240</option>
+								<option value="3">352 x 240</option>
+								<option value="4">352 x 288</option>
+								<option value="5">640 x 480</option>
+								<option value="6">720 x 480P</option>
+								<option value="7">720 x 480I</option>
+								<option value="8">720 x 576P</option>
+								<option value="9">720 x 576I</option>
+								<option value="10">1280 x 720</option>
+								<option value="11">1280 x 960</option>
+								<!--<option value="12">1600 x 1200</option>-->
+								<option value="13">1920 x 1080</option>
+								<!--<option value="14">2048 x 1536</option>-->
+							</select>
+						</div>
+					</div>
+					<div class="video_row">
+						<div class="video_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_FRAMERATE);</script></label>
+						</div>
+						<div class="video_data">
+							<input type="text" id="m_videoFrameRate" class="sysinput" onblur = "FramerateCheck(this.id)" >
+							<!--
+							<span> (1 - 30)</span>-->
+						</div>
+					</div>
+					<div class="video_row">
+						<div class="video_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_QUALITY);</script></label>
+						</div>
+						<div class="video_data">
+							<input type="text" id="m_videoQuality" class="sysinput" onkeydown = "ValueLimited({'id':this.id,'start':1,'end':100});">
+							<!--
+							<span> (1 - 100)</span>-->
+						</div>
+					</div>
+					<div class="video_row">
+						<div class="video_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_LEVEL);</script></label>
+						</div>
+						<div class="video_data">
+							<select id="m_profile" class="sysselect">
+								<option value="1">High</option>
+								<option value="2">Base</option>
+								<option value="4">Main</option>
+							</select>
+						</div>
+					</div>
+					<div class="video_row">
+						<div class="video_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_GOP);</script></label>
+						</div>
+						<div class="video_data">
+							<input type="text" id="m_videoGop" class="sysinput">
+							<span> (1 - 50)</span>
+						</div>
+					</div>
+					<div class="video_row">
+						<div class="video_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_BITRATECTRLMODE);</script></label>
+						</div>
+						<div class="video_data">
+							<select id="m_bitrateCtrlMode" class="sysselect">
+								<option value="0"><script>dwn(IDC_SETTING_DIALOG_AV_CBR);</script></option>
+								<option value="1"><script>dwn(IDC_SETTING_DIALOG_AV_VBR);</script></option>
+							</select>
+						</div>
+					</div>
+					<div class="video_row">
+						<div class="video_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_CBRAVERAGERATE);</script></label>
+						</div>
+						<div class="video_data">
+							<input type="text" id="m_bitrateCBR" class="sysinput">
+							<!--
+							<span> (128 - 8192)Kbps</span>
+							-->
+						</div>
+					</div>
+					<div class="video_row">
+						<div class="video_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_VBRMAXRATE);</script></label>
+						</div>
+						<div class="video_data">
+							<input type="text" id="m_bitrateVBRMax" class="sysinput">
+							<span> Kbps</span>
+						</div>
+					</div>
+					<div class="video_row">
+						<div class="video_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_VBRMINRATE);</script></label>
+						</div>
+						<div class="video_data">
+							<input type="text" id="m_bitrateVBRMin" class="sysinput">
+							<span> Kbps</span>
+						</div>
+					</div>
+					<div class="video_row">
+						<div class="video_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_FORMAT);</script></label>
+						</div>
+						<div class="video_data">
+							<select id="m_encodeFormat" class="sysselect sysselect_disable" disabled='disabled'>
+								<option value="0">H264</option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="slave_stream">
+					<div class="tittle">
+						<script>dwn(IDC_SETTING_DIALOG_AV_TITTLE_SLAVE);</script>
+					</div>
+					<div class="video_row">
+						<div class="video_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_RESOLUTION);</script></label>
+						</div>
+						<div class="video_data">
+							<select id="s_videoSize" onchange = "sVideoSizeChange(this.value)"class="sysselect">
+								<option value="2">320 x 240</option>
+								<option value="3">352 x 240</option>
+								<option value="4">352 x 288</option>
+								<option value="5">640 x 480</option>
+								<option value="6">720 x 480P</option>
+								<option value="7">720 x 480I</option>
+								<option value="8">720 x 576P</option>
+								<!--<option value="9">720 x 576I</option>-->
+								<!--
+								<option value="10">1280 x 720</option>
+								<option value="11">1280 x 960</option>
+								<option value="12">1600 x 1200</option>
+								<option value="13">1920 x 1080</option>
+								<option value="14">2048 x 1536</option>
+								-->
+							</select>
+						</div>
+					</div>
+					<div class="video_row">
+						<div class="video_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_FRAMERATE);</script></label>
+						</div>
+						<div class="video_data">
+							<input type="text" id="s_videoFrameRate" onblur = "FramerateCheck(this.id)" class="sysinput">
+							<!--
+							<span> (1 - 30)</span>-->
+						</div>
+					</div>
+					<div class="video_row">
+						<div class="video_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_QUALITY);</script></label>
+						</div>
+						<div class="video_data">
+							<input type="text" id="s_videoQuality" class="sysinput">
+							<!--
+							<span> (1 - 100)</span>-->
+						</div>
+					</div>
+					<div class="video_row">
+						<div class="video_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_LEVEL);</script></label>
+						</div>
+						<div class="video_data">
+							<select id="s_profile" class="sysselect">
+								<option value="1">High</option>
+								<option value="2">Base</option>
+								<option value="4">Main</option>
+							</select>
+						</div>
+					</div>
+					<div class="video_row">
+						<div class="video_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_GOP);</script></label>
+						</div>
+						<div class="video_data">
+							<input type="text" id="s_videoGop" class="sysinput">
+							<span> (1 - 50)</span>
+						</div>
+					</div>
+					<div class="video_row">
+						<div class="video_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_BITRATECTRLMODE);</script></label>
+						</div>
+						<div class="video_data">
+							<select id="s_bitrateCtrlMode" class="sysselect">
+								<option value="0"><script>dwn(IDC_SETTING_DIALOG_AV_CBR);</script></option>
+								<option value="1"><script>dwn(IDC_SETTING_DIALOG_AV_VBR);</script></option>
+							</select>
+						</div>
+					</div>
+					<div class="video_row">
+						<div class="video_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_CBRAVERAGERATE);</script></label>
+						</div>
+						<div class="video_data">
+							<input type="text" id="s_bitrateCBR" class="sysinput">
+							<!--
+							<span> (128 - 8192)Kbps</span>-->
+						</div>
+					</div>
+					<div class="video_row">
+						<div class="video_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_VBRMAXRATE);</script></label>
+						</div>
+						<div class="video_data">
+							<input type="text" id="s_bitrateVBRMax" class="sysinput">
+							<span> Kbps</span>
+						</div>
+					</div>
+					<div class="video_row">
+						<div class="video_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_VBRMINRATE);</script></label>
+						</div>
+						<div class="video_data">
+							<input type="text" id="s_bitrateVBRMin" class="sysinput">
+							<span> Kbps</span>
+						</div>
+					</div>
+					<div class="video_row">
+						<div class="video_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_FORMAT);</script></label>
+						</div>
+						<div class="video_data">
+							<select id="s_encodeFormat" class="sysselect sysselect_disable" disabled='disabled'>
+								<option value="0">H264</option>
+							</select>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--------------------video_param----------------------->
+			<div class = "hide shot_param">
+				
+				<div class="tittle">
+					<label><script>dwn(IDC_SHOT_PARAM_SET);</script></label>
+				</div>				
+				<div id = "info">
+				<div class="sysinfo_row">
+					<div class="sysinfo_desc">
+						<label><script>dwn(IDC_AFCONTROL_MODEL);</script></label>
+					</div>
+					<div class = "sysinfo_data" >
+						<select id = "AFControlModel" class = "sysselect" name = "AFControlModel" onchange = "ChangeAFSensitivityStatus()">
+							<option value = "0"><script>dwn(IDC_AFCONTROL_AUTO);</script></option>
+							<option value = "1"><script>dwn(IDC_AFCONTROL_SEMI_AUTOMATIC);</script></option>
+							<option value = "2"><script>dwn(IDC_AFCONTROL_MANUL);</script></option>
+						</select>
+					</div>
+				</div>
+				<div class="sysinfo_row">
+					<div class="sysinfo_desc">
+						<label><script>dwn(IDC_AF_SENSITIVITY);</script></label>
+					</div>
+					<div class = "sysinfo_data" >
+						<input id = "AFSensitivity" class = "sysinput_align_select" type = "text" onkeydown = "ValueLimited({'id':this.id,'start':1,'end':255});">
+						<span>(1-255)</span>
+					</div>	
+				</div>
+				<div class="sysinfo_row">
+					<div class="sysinfo_desc">
+						<label><script>dwn(IDC_AF_AREA_SELECT);</script></label>
+					</div>	
+					<div class = "sysinfo_data" >
+						<select id = "AFAreaSelect" class = "sysselect" name = "AFAreaSelect">
+							<option value = "0"><script>dwn(IDC_ALL_REGION_FOCUS);</script></option>
+							<option value = "1"><script>dwn(IDC_CENTER_FOCUS);</script></option>
+						</select>
+					</div>	
+				</div>
+				<div class="sysinfo_row">
+					<div class="sysinfo_desc">
+						<label><script>dwn(IDC_AF_SEARCH_MODEL);</script></label>
+					</div>
+					<div class = "sysinfo_data" >
+						<select id = "AFSearchModel" class = "sysselect" name = "AFSearchModel">
+							<option value = "0"><script>dwn(IDC_AF_SEARCH_MODEL_0);</script></option>
+							<option value = "1"><script>dwn(IDC_AF_SEARCH_MODEL_1);</script></option>
+							<option value = "2"><script>dwn(IDC_AF_SEARCH_MODEL_2);</script></option>
+							<option value = "3"><script>dwn(IDC_AF_SEARCH_MODEL_3);</script></option>
+							<option value = "4"><script>dwn(IDC_AF_SEARCH_MODEL_4);</script></option>
+						</select>						
+					</div>	
+				</div>
+				<div class="sysinfo_row">
+					<div class="sysinfo_desc">
+						<label><script>dwn(IDC_AF_DIGITZOOMENABLE);</script></label>
+					</div>	
+					<div class = "sysinfo_data" >
+						<input id = "DigitZoomEnable" class = "sysinput_checbox" type = "checkbox" disabled = "disabled">
+					</div>
+				</div>
+				</div>
+			</div>
+			<!------------------------------shot_param-------------------------------->
+			<div class="hide video_param">
+				<div class="tittle">
+					<label><script>dwn(IDC_SETTING_DIALOG_AV_PARA_TITLE_OSD);</script></label>
+				</div>
+				<div class="simu_video_container">
+					<div id="simu_video">
+						<div id="name_drag_div" class="hide video_drag_div">
+						</div>
+						<div id="osd_time_drag_div" class="hide video_drag_div">
+						</div>
+						<div id="text_drag_div" class="hide video_drag_div">
+						</div>
+					</div>
+				</div>
+				<div class="video_group">
+					<div class="video_group_left">
+						<div class="left_desc">
+							<label style="display:none;"><script>dwn(IDC_SETTING_DIALOG_AV_PARA_STREAMNUM);</script></label>
+						</div>
+						<select class="sysselect" id="stream_sel" style="display:none;">
+							<option value="0"><script>dwn(IDC_SETTING_DIALOG_AV_PARA_MASTER);</script></option>
+							<option value="1"><script>dwn(IDC_SETTING_DIALOG_AV_PARA_SLAVE);</script></option>
+						</select>
+						<label class="stream_label" style="margin-left:84px;"><script>dwn(IDC_SETTING_DIALOG_AV_PARA_FONTSIZE);</script></label>
+						<select class="sysselect" id="stream_fontsize">
+							<option value="0">24</option>
+							<option value="1">32</option>
+							<option value="2">42</option>
+							<option value="3">48</option>
+						</select>
+					</div>
+					<div class="video_group_right">
+						<div class="right_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_PARA_TEXT2);</script></label>
+						</div>
+						<span class="video_span">
+							<input id="osd_text2_chk" type="checkbox">
+						</span>
+						<span style="vertical-align: 3px;text-align: center;">
+							<input type="text" id="osd_text2_str" class="sysinput">
+						</span>
+					</div>
+				</div>
+				<div class="video_group">
+					<div class="video_group_left">
+						<div class="left_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_PARA_BPS);</script></label>
+						</div>
+						<span class="video_span">
+							<input id="osd_bps_chk" type="checkbox">
+						</span>
+						<span style="vertical-align: 2px;text-align: center;">
+							<label class="stream_label"><script>dwn(IDC_SETTING_DIALOG_AV_PARA_TIME);</script></label>
+						</span>
+						<span class="video_span">
+							<input id="osd_time_chk" type="checkbox">
+						</span>
+						<span style="vertical-align: 3px;text-align: center;">
+							<select class="sysselect" id="osd_time_format">
+								<option value="0">YYYY-MM-DD</option>
+								<option value="1">YYYY/MM/DD</option>
+								<option value="2">MM-DD-YYYY</option>
+								<option value="3">MM/DD/YYYY</option>
+							</select>
+						</span>
+					</div>
+					<div class="video_group_right">
+						<div class="right_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_PARA_TEXT3);</script></label>
+						</div>
+						<span class="video_span">
+							<input id="osd_text3_chk" type="checkbox">
+						</span>
+						<span style="vertical-align: 3px;text-align: center;">
+							<input type="text" id="osd_text3_str" class="sysinput">
+						</span>
+					</div>
+				</div>
+				<div class="video_group">
+					<div class="video_group_left">
+						<div class="left_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_PARA_NAME);</script></label>
+						</div>
+						<span class="video_span">
+							<input id="osd_name_chk" type="checkbox">
+						</span>
+						<span style="vertical-align: 3px;text-align: center;">
+							<input type="text" id="osd_name_str" class="sysinput">
+						</span>
+					</div>
+					<div class="video_group_right">
+						<div class="right_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_PARA_TEXT4);</script></label>
+						</div>
+						<span class="video_span">
+							<input id="osd_text4_chk" type="checkbox">
+						</span>
+						<span style="vertical-align: 3px;text-align: center;">
+							<input type="text" id="osd_text4_str" class="sysinput">
+						</span>
+					</div>
+				</div>
+				<div class="video_group">
+					<div class="video_group_left">
+						<div class="left_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_AV_PARA_TEXT1);</script></label>
+						</div>
+						<span class="video_span">
+							<input id="osd_text1_chk" type="checkbox">
+						</span>
+						<span style="vertical-align: 3px;text-align: center;">
+							<input type="text" id="osd_text1_str" class="sysinput">
+						</span>
+					</div>
+					<div class="video_group_right">
+						<div class="right_desc">
+						<label><script>dwn(IDC_SETTING_DIALOG_AV_PARA_TEXT5);</script></label>
+						</div>
+						<span class="video_span">
+							<input id="osd_text5_chk" type="checkbox">
+						</span>
+						<span style="vertical-align: 3px;text-align: center;">
+							<input type="text" id="osd_text5_str" class="sysinput">
+							<button id = "osd_enable" style = "visibility:hidden;"></button>
+						</span>
+					</div>
+				</div>
+			</div>
+				<!--------------------------------------video osd---------------------------->
+			<div class="hide video_cover">
+				<div class="tittle">
+					<label><script>dwn(IDC_SETTING_DIALOG_COVER_SET);//遮挡设置</script></label>
+				</div>
+				<div class="video_cover_container" id="video_cover_container" style="position:relative;">
+					<div id="cover_video" style="position:absolute;">
+					</div>
+				</div>
+				<div class="cover_group" style="width:430px;">
+					<table cellpadding="0" cellspacing="0" border="0" width="400px">
+						<tr>
+							<td style="width:40px;text-align: right;"><script>dwn(IDC_SETTING_DIALOG_COVER_ENABLE);//启用 :</script></td>
+							<td style="width:25px;">
+								<input id="cover_chk" type="checkbox" style="margin-top:1px;">
+							</td>
+							<td>
+								<button id="cover_clear"><script>dwn(IDC_SETTING_DIALOG_COVER_CLEARALL);//清除全部</script></button>
+								<button id="cover_enable" style = "visibility:hidden;" ></button>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<!-------------------------------video cover---------------------------->
+			<div class="hide ethernet_set">
+				<div class="tittle">
+					<label><script>dwn(IDC_SETTING_DIALOG_NET_ETHERNET_TITLE_DNS);</script></label>
+				</div>
+				<div id="info">
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_NET_ETHERNET_DNS);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="dnsAddr" type="text">
+						</div>
+					</div>
+				</div>
+				<div class="tittle">
+					<label><script>dwn(IDC_SETTING_DIALOG_NET_ETHERNET_TITLE_ETH);</script></label>
+				</div>
+				<div id="info">
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_NET_ETHERNET_IP);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="ipAddr" type="text">
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_NET_ETHERNET_MASK);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="subnet_mask" type="text">
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_NET_ETHERNET_GATEWAY);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="gateway" type="text">
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_NET_ETHERNET_MAC);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput sysinput_disable" id="macAddr" type="text" ReadOnly="true">
+						</div>
+					</div>
+				</div>
+				<div class="tittle">
+					<label><script>dwn(IDC_SETTING_DIALOG_NET_ETHERNET_TITLE_DHCP);</script></label>
+				</div>
+				<div id="info">
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_NET_ETHERNET_DHCPSWITCH);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input id="dhcp_chk" type="checkbox">
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-------------------------ethernet_set--------------------------------->
+			<div class="hide ddns_set">
+				<div class="tittle">
+					<label><script>dwn(IDC_SETTING_DIALOG_NET_DDNS_TITLE_DDNS);</script></label>
+				</div>
+				<div id="info">
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc" id = "ddns_ck">
+							<label><script>dwn(IDC_SETTING_DIALOG_NET_DDNS_DDNSSWITCH);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input id="ddns_chk" type="checkbox">
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc" id = "ddns_provid">
+							<label><script>dwn(IDC_SETTING_DIALOG_NET_DDNS_SERVSUPPLY);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<select id="ddns_provide" class="sysselect">
+								<option value="1">9299.org</option>
+								<option value="2">3322.net</option>
+							</select>
+						</div>
+					</div>
+					
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc" id = "device_domain_name">
+							<label><script>dwn(IDC_SETTING_DIALOG_DDNSDEVNAME);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="ddns_domain_name" type="text">
+						</div>
+					</div>
+					
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc" id = "ddns_nam">
+							<label><script>dwn(IDC_SETTING_DIALOG_NET_DDNS_USERNAME);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="ddns_name" type="text">
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc" id = "ddns_pwd">
+							<label><script>dwn(IDC_SETTING_DIALOG_NET_DDNS_USERPASSWORD);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="ddns_passwd" type="password">
+						</div>
+					</div>
+				</div>
+			</div>
+		<!-------------------------------ddns_set------------------->
+			<div class="hide net_port_set">
+				<div class="tittle">
+					<label><script>dwn(IDC_SETTING_DIALOG_NET_PORT_TITLE);</script></label>
+				</div>
+				<div id="info">
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_NET_PORT_WEB);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="web_port" type="text">
+							<label>1~65535</label>
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_NET_PORT_FTP);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="ftp_port" type="text">
+							<label>1~65535</label>
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_NET_PORT_RTSP);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="rtsp_port" type="text">
+							<label>1~65535</label>
+						</div>
+					</div>
+					<!--
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_NET_PORT_SMTP);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="smtp_port" type="text">
+							<label>1~65535</label>
+						</div>
+					</div>
+					--->
+				</div>
+			</div>
+			<!----------------------------net_port_set-------------------->
+<!-------protocol---->			
+			<div class = "hide protocol" id = "thirdpartyprotocol">
+				<div class="tittle">
+					<label><script>dwn(IDC_SETTING_DIALOG_PROTOCOL);</script></label>
+				</div>	
+				<div id="info">
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115">
+							<label><script>dwn(IDC_SETTING_DIALOG_PROTOCOL_ENABLE);</script></label>
+						</div>
+						<div class="sysinfo_data_checkbox">
+							<input id="thirdpartyprotocol_chk" type="checkbox" onclick = "ProtocolEnable()">
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115">
+							<label><script>dwn(IDC_SETTING_DIALOG_PROTOCOL_OPTION);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<select id = "protocol_option" class="sysinput_sheet_wid186" name = "third_party_protocol" onChange = "GetProtocolOption()">
+							</select>
+						</div>
+					</div>
+				</div>
+				<div class="tittle_top10px">
+				</div>
+<!---------------28181---------------------------------->
+
+				<div id="protocol_28181" style = "visibility:hidden;">
+				   <div id="info">
+					
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115" >
+							<label><script>dwn(IDC_SETTING_DIALOG_28181_ADDRESS);//服务器地址 : </script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="28181_addr" type="text" style="margin-left:5px;">
+						</div>
+					</div>
+					
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115" >
+							<label><script>dwn(IDC_SETTING_DIALOG_28181_PORT);//端口 : </script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="28181_port" type="text" style="margin-left:5px;"><label>1~65535</label>
+						</div>
+					</div>
+					
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115" >
+							<label><script>dwn(IDC_SETTING_DIALOG_28181_PASSWD);//密码 : </script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="28181_passwd" type="password" style="margin-left:5px;">
+						</div>
+					</div>
+					
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115" >
+							<label><script>dwn(IDC_SETTING_DIALOG_28181_REGINTERVAL);//注册时间间隔 : </script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="28181_register_interval" type="text" style="margin-left:5px;">
+							<label><script>dwn(IDC_SETTING_DIALOG_SECOND);</script></label>
+						</div>
+					</div>
+					
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115" >
+							<label><script>dwn(IDC_SETTING_DIALOG_28181_HBINTERVAL);//心跳时间间隔 : </script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="28181_heart_interval" type="text" style="margin-left:5px;">
+							<label><script>dwn(IDC_SETTING_DIALOG_SECOND);</script></label>
+						</div>
+					</div>
+					
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115" >
+							<label><script>dwn(IDC_SETTING_DIALOG_28181_SERVERID);//服务�?ID : </script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="server_id" type="text" style="margin-left:5px;">
+						</div>
+					</div>
+					
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115" >
+							<label><script>dwn(IDC_SETTING_DIALOG_28181_DEVICEID);//设备 ID : </script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="device_id" type="text" style="margin-left:5px;">
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115" >
+							<label><script>dwn(IDC_SETTING_DIALOG_28181_CHANNELID);//通道 ID : </script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="channel_id" type="text" style="margin-left:5px;">
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115" >
+							<label><script>dwn(IDC_SETTING_DIALOG_28181_ALARMINID);//报警输入 ID : </script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="alarmin_id" type="text" style="margin-left:5px;">
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115" >
+							<label><script>dwn(IDC_SETTING_DIALOG_28181_ALARMOUTID);//报警输出 ID : </script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="alarmout_id" type="text" style="margin-left:5px;">
+						</div>
+					</div>	
+				  </div>
+				</div>
+<!---------------end of 28181---------------------------------->
+<!------------------CMI--------------------------------->
+				<div id="protocol_CMI" style = "visibility:hidden;">
+					<div id="info">	
+						<div class="sysinfo_row">
+							<div class="sysinfo_desc_wid115">
+								<label><script>dwn(IDC_SETTING_DIALOG_TCL_PORT);//端口 : </script></label>
+							</div>
+							<div class="sysinfo_data">
+								<input class="sysinput" id="tcl_port" type="text" style="margin-left:5px;"><label>1~65535</label>
+							</div>
+						</div>							
+					</div>
+				</div>
+<!------------------end of CMI--------------------------------->
+<!--------------------Min Ruan--------------------------------->
+				<div id="protocol_MINGSOFTAGE" style = "visibility:hidden;">
+					<div id="info">	
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115" >
+							<label><script>dwn(IDC_SETTING_DIALOG_MINGSOFTSERIALNUM);//服务器地址 : </script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="MingsoftSerialNum" type="text" style="margin-left:5px;">
+						</div>
+					</div>				
+
+					
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115" >
+							<label><script>dwn(IDC_REGISTER_USERNAME);//服务器地址 : </script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="MingsoftName" type="text" style="margin-left:5px;">
+						</div>
+					</div>
+					
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115" >
+							<label><script>dwn(IDC_LOGIN_PASSWD);//密码 : </script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="MingsoftPasswd" type="password" style="margin-left:5px;">
+						</div>
+					</div>	
+					
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115" >
+							<label><script>dwn(IDC_SETTING_DIALOG_ACCESS_SERVER_ADDR);//服务器地址 : </script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="MingsoftIp" type="text" style="margin-left:5px;">
+						</div>
+					</div>	
+					
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115" >
+							<label><script>dwn(IDC_SETTING_DIALOG_ACCESS_SERVER_PORT);//服务器地址 : </script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="MingsoftPort" type="text" style="margin-left:5px;">
+						</div>
+					</div>
+
+	
+					</div>
+				</div>
+<!--------------------end of Min Ruan--------------------------------->
+<!-------------------Protocol I8----------->
+				<div id="protocol_I8" style = "visibility:hidden;">
+					<div id="info">	
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115" >
+							<label><script>dwn(IDC_SETTING_DIALOG_NET_PORT_I8);//服务器地址 : </script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="I8Port" type="text" style="margin-left:5px;">
+						</div>
+					</div>
+					</div>
+				</div>
+<!-------------------End of Protocol I8----------->
+<!-------------------protocol hanyun-------------->
+				<div id = "protocol_CCLIOT" style = "visibility:hidden;">
+					<div id = "info">
+						<div class = "sysinfo_row">
+							<div class="sysinfo_desc_wid115" >
+								<label><script>dwn(IDC_SETTING_SERVER_ADDRESS);//服务器地址 : </script></label>
+							</div>
+							<div class = "sysinfo_data">
+								<input id = "hanyun_addr" class = "sysinput" type = "text" style = "margin-left:5px;">
+							</div>
+						</div>
+						<div class = "sysinfo_row">
+							<div class="sysinfo_desc_wid115" >
+								<label><script>dwn(IDC_SETTING_DIALOG_SERVER_PORT);//�˿� : </script></label>
+							</div>
+							<div class="sysinfo_data">
+								<input class="sysinput" id="hanyun_port" type="text" style="margin-left:5px;"><label>1~65535</label>
+							</div>							
+						</div>
+						<div class = "sysinfo_row">
+							<div class="sysinfo_desc_wid115" >
+								<label><script>dwn(IDC_SETTING_DIALOG_HBINTERVAL);//����ʱ���� : </script></label>
+							</div>
+							<div class="sysinfo_data">
+								<input class="sysinput" id="hanyun_heart_interval" type="text" style="margin-left:5px;">
+								<label><script>dwn(IDC_SETTING_DIALOG_SECOND);</script></label>
+							</div>							
+						</div>
+					</div>
+				</div>
+<!-------------------end of protocol hanyun-------------->
+<!----------------------anshida--------------------------------->
+				<div id = "protocol_ANSHIDA" style = "visibility:hidden;">				
+					<div id = "info">
+						<div class = "sysinfo_row">
+							<div class = "sysinfo_desc_wid115">
+								<label><script>dwn(IDC_SERIAL_NUMBER);</script></label>
+							</div>
+							<div class = "sysinfo_data">
+								<input id = "anshida_serialnumber" class = "sysinput" type = "text" style = "margin-left:5px;">
+							</div>
+						</div>
+						<div class = "sysinfo_row">
+							<div class = "sysinfo_desc_wid115">
+								<label><script>dwn(IDC_REGISTER_USERNAME);</script></label>
+							</div>
+							<div class = "sysinfo_data">
+								<input class = "sysinput" id = "anshida_register_username" style = "margin-left:5px;">
+							</div>
+						</div>
+						<div class = "sysinfo_row">
+							<div class = "sysinfo_desc_wid115">
+								<label><script>dwn(IDC_SETTING_DIALOG_SYS_USRMANAGE_USERPASSWD);</script></label>
+							</div>
+							<div class = "sysinfo_data">
+								<input id = "anshida_pwd" class = "sysinput" type = "password" style = "margin-left:5px;">
+							</div>
+						</div>
+						<div class = "sysinfo_row">
+							<div class = "sysinfo_desc_wid115">
+								<label><script>dwn(IDC_SETTING_DIALOG_ACCESS_SERVER_ADDR);</script></label>
+							</div>
+							<div class = "sysinfo_data">
+								<input id = "anshida_access_server_addr" class = "sysinput" type = "text" style = "margin-left:5px;">
+							</div>
+						</div>
+						<div class = "sysinfo_row">
+							<div class = "sysinfo_desc_wid115">
+								<label><script>dwn(IDC_SETTING_DIALOG_ACCESS_SERVER_PORT);</script></label>
+							</div>
+							<div class = "sysinfo_data">
+								<input id = "anshida_access_port" class = "sysinput" type = "text" style = "margin-left:5px;">
+							</div>							
+						</div>
+					</div>
+				</div>
+<!--------------------- end of anshida ---------------------------------->
+<!----------------------xinggu------------------------------------->
+				<div id = "protocol_STARVALLEY" style = "visibility:hidden;">
+					<div id = "info">
+						<div class = "sysinfo_row">
+							<div class = "sysinfo_desc_wid115">
+								<label><script>dwn(IDC_SETTING_SERVER_ADDRESS);</script></label>
+							</div>
+							<div class = "sysinfo_data">
+								<input id = "xinggu_addr" class = "sysinput" type = "text" style = "margin-left:5px;">
+							</div>							
+						</div>
+						<div class = "sysinfo_row">
+							<div class="sysinfo_desc_wid115" >
+								<label><script>dwn(IDC_SETTING_DIALOG_SERVER_PORT);//�˿� : </script></label>
+							</div>
+							<div class="sysinfo_data">
+								<input class="sysinput" id="xinggu_port" type="text" style="margin-left:5px;"><label>1~65535</label>
+							</div>							
+						</div>
+						<div class = "sysinfo_row">
+							<div class="sysinfo_desc_wid115" >
+								<label><script>dwn(IDC_SETTING_DIALOG_HBINTERVAL);//����ʱ���� : </script></label>
+							</div>
+							<div class="sysinfo_data">
+								<input class="sysinput" id="xinggu_heart_interval" type="text" style="margin-left:5px;">
+								<label><script>dwn(IDC_SETTING_DIALOG_SECOND);</script></label>
+							</div>						
+						</div>						
+					</div>
+				</div>
+<!----------------------end of xinggu------------------------------------->			
+			</div>
+
+<!-------protocol---------------------------------------->
+<!-------3G/4G------------------->
+			<div class = "hide 3g_4g">
+				<div class="tittle">
+					<label><script>dwn(IDC_SETTING_3G_4G_STATUS);</script></label>
+				</div>				
+				<div id="info">
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115">
+							<label><script>dwn(IDC_SETTING_MODULE_NAME);</script></label>
+						</div>
+						<div class="sysinfo_data" id = "3g_4g_module_name">
+							<label>Not Exist</label>
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115">
+							<label><script>dwn(IDC_SETTING_3G_4G_SIGNAL);</script></label>
+						</div>
+						<div class="sysinfo_data" id = "3g_4g_signal">
+							<label>0%</label>							
+						</div>
+					</div>					
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115">
+							<label><script>dwn(IDC_SETTING_SIM_CARD_STATUS);</script></label>
+						</div>
+						<div class="sysinfo_data" id = "sim_card_status">
+							<label>Not Exist</label>							
+						</div>
+					</div>					
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115">
+							<label><script>dwn(IDC_SETTING_PPP_STATUS);</script></label>
+						</div>
+						<div class="sysinfo_data" id = "ppp_status">
+							<label>Disconnect</label>							
+						</div>
+					</div>					
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115">
+							<label><script>dwn(IDC_SETTING_3G_4G_HARDWARE_STATUS);</script></label>
+						</div>
+						<div class="sysinfo_data" id = "3g_4g_hardware_status">
+							<label>Hardware Fault</label>							
+						</div>
+					</div>					
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115">
+							<label></label>
+						</div>
+						<div class="sysinfo_data">
+							<button id = "3g_4g_flush" style = "width:80px;">Flush</button>
+						</div>
+					</div>						
+				</div>
+				
+				<div class="tittle">
+					<label><script>dwn(IDC_SETTING_4G_CONFIG);</script></label>
+				</div>
+				<div id="info">
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115">
+							<label><script>dwn(IDC_SETTING_4G_SWITCH);</script></label>
+						</div>
+						<div class="sysinfo_data_checkbox" style = "padding-left:5px;">
+							<input id="3g_4g_switch" type="checkbox" onclick = "">
+						</div>						
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115">
+							<label><script>dwn(IDC_SETTING_3G_4G_APN);</script></label>
+						</div>
+						<div class="sysinfo_data" >
+							<input id="3g_4g_apn" type="text" class = "sysinput">
+						</div>						
+					</div>					
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115">
+							<label><script>dwn(IDC_SETTING_USER_NAME);</script></label>
+						</div>
+						<div class="sysinfo_data" >
+							<input id="3g_4g_user_name" type="text" class = "sysinput">
+						</div>						
+					</div>					
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc_wid115" >
+							<label><script>dwn(IDC_SETTING_USER_PASSWD);</script></label>
+						</div>
+						<div class="sysinfo_data" >
+							<input id="3g_4g_passwd" type="text" class = "sysinput">
+						</div>						
+					</div>					
+				</div>
+			</div>
+
+			<div class="hide alarm_set">
+				<div class="tabs">
+					<ul>
+						<li>
+							<a href="#alarm_time_period"><script>dwn(IDC_SETTING_DIALOG_ALARM_PERIOD);</script></a>
+						</li>
+						<li>
+							<a href="#alarm_func_conf"><script>dwn(IDC_SETTING_DIALOG_ALARM_FUNC);</script></a>
+						</li>
+					</ul>
+					<div id="alarm_time_period">
+						<div id="info">
+							<div class="sysinfo_row">
+								<label><script>dwn(IDC_SETTING_DIALOG_ALARM_CURSETTING);</script></label>
+								<select id="alarm_cur_sel_week" class="sysselect" onmousedown = "SetChange1(true)">
+									<option value="0"><script>dwn(IDC_GENERAL_SUNDAY);</script></option>
+									<option value="1"><script>dwn(IDC_GENERAL_MONDAY);</script></option>
+									<option value="2"><script>dwn(IDC_GENERAL_TUESDAY);</script></option>
+									<option value="3"><script>dwn(IDC_GENERAL_WEDNESDAY);</script></option>
+									<option value="4"><script>dwn(IDC_GENERAL_THURSDAY);</script></option>
+									<option value="5"><script>dwn(IDC_GENERAL_FRIDAY);</script></option>
+									<option value="6"><script>dwn(IDC_GENERAL_SATURDAY);</script></option>
+								</select>
+								<button id="alarm_copy_to_btn"><script>dwn(IDC_SETTING_DIALOG_ALARM_COPYTO);</script></button>
+								<button id="alarm_add_task_btn"><script>dwn(IDC_SETTING_DIALOG_ALARM_ADDTASK);</script></button>
+								<button id="alarm_del_task_btn"><script>dwn(IDC_SETTING_DIALOG_ALARM_DELTASK);</script></button>
+							</div>
+							<div class="sysinfo_row">
+								<table id="alarm_rec_scheduling" cellpadding="0" cellspacing="0" border='1'>
+									<tr>
+										<th><script>dwn(IDC_SETTING_DIALOG_SYS_ALARMCONF_BEGINTIME);</script></th>
+										<th><script>dwn(IDC_SETTING_DIALOG_SYS_ALARMCONF_ENDTIME);</script></th>
+									</tr>
+								</table>
+							</div>
+
+							<div class="hide clear" id="alarm_copy_to_dialog">
+								<div class="copy_dialog_group">
+									<label><script>dwn(IDC_GENERAL_T_SUNDAY);</script></label>
+									<input id="alarm_dialog_sunday_chk" type="checkbox">
+									<label><script>dwn(IDC_GENERAL_T_MONDAY);</script></label>
+									<input id="alarm_dialog_monday_chk" type="checkbox">
+									<label><script>dwn(IDC_GENERAL_T_TUESDAY);</script></label>
+									<input id="alarm_dialog_tuesday_chk" type="checkbox">
+									<label><script>dwn(IDC_GENERAL_T_WEDNESDAY);</script></label>
+									<input id="alarm_dialog_wednesday_chk" type="checkbox">
+								</div>
+								<div class="copy_dialog_group">
+									<label><script>dwn(IDC_GENERAL_T_THURSDAY);</script></label>
+									<input id="alarm_dialog_thursday_chk" type="checkbox">
+									<label><script>dwn(IDC_GENERAL_T_FRIDAY);</script></label>
+									<input id="alarm_dialog_friday_chk" type="checkbox">
+									<label><script>dwn(IDC_GENERAL_T_SATURDAY);</script></label>
+									<input id="alarm_dialog_saturday_chk" type="checkbox">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="alarm_func_conf">
+						<div id="info" style="margin-left:10px;">
+							<div class="sysinfo_row">
+								<div class="sysinfo_desc">
+									<label><script>dwn(IDC_SETTING_DIALOG_ALARM_STRAGEGY);</script></label>
+								</div>
+								<div class="sysinfo_data">
+									<select id="alarm_strategy" class="sysselect">
+										<option value="0"><script>dwn(IDC_SETTING_DIALOG_ALARM_CLOSE);</script></option>
+										<option value="1"><script>dwn(IDC_SETTING_DIALOG_ALARM_PIC);</script></option>
+										<option value="2"><script>dwn(IDC_SETTING_DIALOG_ALARM_RECORD);</script></option>
+									</select>
+								</div>
+							</div>
+							<div class="sysinfo_row">
+								<div class="sysinfo_desc">
+									<label><script>dwn(IDC_SETTING_DIALOG_ALARM_FTP);</script></label>
+								</div>
+								<div class="sysinfo_data">
+									<input id="enable_ftp" type="checkbox">
+								</div>
+							</div>
+							<div class="sysinfo_row">
+								<div class="sysinfo_desc">
+									<label><script>dwn(IDC_SETTING_DIALOG_ALARM_EMAIL);</script></label>
+								</div>
+								<div class="sysinfo_data">
+									<input id="enable_email" type="checkbox">
+								</div>
+							</div>
+							<div class="sysinfo_row">
+								<div class="sysinfo_desc">
+									<label><script>dwn(IDC_SETTING_DIALOG_ALARM_RECLEN);</script></label>
+								</div>
+								<div class="sysinfo_data">
+									<input class="sysinput" id="record_time" type="text">
+									<label><script>dwn(IDC_GENERAL_SECOND_ALARMRECORD);</script></label>
+								</div>
+							</div>
+							<div class="sysinfo_row">
+								<div class="sysinfo_desc">
+									<label><script>dwn(IDC_SETTING_DIALOG_ALARM_SNAPPIC);</script></label>
+								</div>
+								<div class="sysinfo_data">
+									<table class="snap_table">
+										<tr>
+											<td>
+												<script>dwn(IDC_SETTING_DIALOG_ALARM_SNAPCOUNT);</script>
+											</td>
+											<td>
+												<select id="snap_num" class="sysselect">
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+													<option value="4">4</option>
+													<option value="5">5</option>
+													<option value="6">6</option>
+													<option value="7">7</option>
+													<option value="8">8</option>
+													<option value="9">9</option>
+													<option value="10">10</option>
+												</select>
+											</td>
+											<td>
+												<script>dwn(IDC_SETTING_DIALOG_ALARM_SNAPFREQ);</script>
+											</td>
+											<td>
+												<select id="snap_freq" class="sysselect">
+													<option value="1">1</option>
+													<option value="2">2</option>
+													<option value="3">3</option>
+													<option value="4">4</option>
+													<option value="5">5</option>
+													<option value="6">6</option>
+													<option value="7">7</option>
+													<option value="8">8</option>
+													<option value="9">9</option>
+													<option value="10">10</option>
+												</select>
+												<label><script>dwn(IDC_GENERAL_SECOND);</script></label>
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+							<div class="sysinfo_row">
+								<div class="sysinfo_desc">
+									<label><script>dwn(IDC_SETTING_DIALOG_ALARM_DEVICE);</script></label>
+								</div>
+								<div class="sysinfo_data" style="width:500px;">
+									<table>
+										<tr>
+											<td>
+												<input id="device_alarm_io1" type="checkbox">
+											</td>
+											<td>
+												<script>dwn(IDC_SETTING_DIALOG_ALARM_IO1);</script>
+											</td>
+											<td>
+												<input id="device_alarm_io2" type="checkbox">
+											</td>
+											<td>
+												<script>dwn(IDC_SETTING_DIALOG_ALARM_IO2);</script>
+											</td>
+											<td>
+												<input id="device_alarm_io3" type="checkbox" disabled="false">
+											</td>
+											<td>
+												<script>dwn(IDC_SETTING_DIALOG_ALARM_IO3);</script>
+											</td>
+											<td>
+												<input id="device_alarm_io4" type="checkbox" disabled="false">
+											</td>
+											<td>
+												<script>dwn(IDC_SETTING_DIALOG_ALARM_IO4);</script>
+											</td>
+											<td>
+												<input id="device_alarm_neterror" type="checkbox" style="display:none;">
+											</td>
+											<td>
+												<!--<script>dwn(IDC_SETTING_DIALOG_ALARM_NETERROR);</script>-->
+											</td>
+											<td>
+												<input id="device_alarm_deverror" type="checkbox" style="display:none;">
+											</td>
+											<td>
+												<!--<script>dwn(IDC_SETTING_DIALOG_ALARM_DEVERROR);</script>-->
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+							<!--
+							<div class="sysinfo_row">
+								<div class="sysinfo_desc">
+									<label><script>dwn(IDC_SETTING_DIALOG_ALARM_CHN0);</script></label>
+								</div>
+								<div class="sysinfo_data">
+									<table>
+										<tr>
+											<td>
+												<input id="chn_alarm_motion" type="checkbox">
+											</td>
+											<td>
+												<script>dwn(IDC_SETTING_DIALOG_ALARM_MD);</script>
+											</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+							-->
+						</div>
+					</div>
+				</div>
+			</div>
+			<!----------------alarm_set----------------------->
+			<div class="hide linkage_set">
+				<div class="tittle">
+					<label><script>dwn(IDC_SETTING_DIALOG_ALARM_LINK_TITLE_EMAIL);</script></label>
+				</div>
+				<div id="info">
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_ALARM_LINK_EMAILADDR);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="email_addr" type="text" style="ime-mode:disabled">
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_ALARM_LINK_EMAILADDR_PORT);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="email_addr_port" type="text">
+						</div>
+					</div>					
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_IDENTITY_VERIFY);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input  class="sysinput_checbox" id="enable_identity_verify" type="checkbox">
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_ALARM_LINK_EMAILUSERNAME);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="email_username" type="text" maxlength="31">
+						</div>
+					</div>
+
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_ALARM_LINK_EMAILUSERPASSWD);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="email_userpasswd" type="password">
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_ALARM_LINK_EMAILSENDTO);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="email_sendto" type="text" style="ime-mode:disabled">
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_ALARM_LINK_EMAILRECEIVE);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="email_receive" type="text" style="ime-mode:disabled">
+						</div>
+					</div>					
+				</div>
+				<div class="tittle">
+					<label><script>dwn(IDC_SETTING_DIALOG_ALARM_LINK_TITLE_FTP);</script></label>
+				</div>
+				<div id="info">
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_ALARM_LINK_FTPADDR);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="ftp_addr" type="text" style="ime-mode:disabled">
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_ALARM_LINK_FTPUSERNAME);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="ftp_username" type="text">
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_ALARM_LINK_FTPUSERPASSWD);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="ftp_userpasswd" type="password">
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_ALARM_LINK_FTPPATH);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="ftp_path" type="text">
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--------------------linkage_set---------------->
+			<div class="hide io_alarm">
+				<div class="tittle">
+					<label><script>dwn(IDC_SETTING_DIALOG_ALARM_IO_TITLE_LINK);</script></label>
+				</div>
+				<div id="info">
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_ALARM_IO_CHANNEL);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<select id="io_chn_sel" class="sysselect">
+								<option value="1">1</option>
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="4">4</option>
+							</select>
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_ALARM_IO_PRESET);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<select id="io_preset" class="sysselect">
+							</select>
+							<input id="preset_chk" type="checkbox" style="position: relative; top: 1px; #top:0px;">
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_ALARM_IO_OUTPUT);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<select id="io_output_preset" class="sysselect">
+								<option value="1">1</option>
+							</select>
+							<input id="io_output_chk" type="checkbox" style="position: relative; top: 1px; #top:0px;">
+						</div>
+					</div>
+				</div>
+			</div>
+			<!----------------io_alarm--------------------------->
+			<div class="hide md_alarm">
+				<div class="tittle">
+					<label><script>dwn(IDC_SETTING_DIALOG_MD_SET);</script></label>
+				</div>
+				<div class="video_cover_container" style="position:relative;">
+					<div id="md_video" style="position:absolute;">
+					</div>
+				</div>
+				<div class="cover_group">
+					<table cellpadding="0" cellspacing="0" border="0" width="500px">
+						<tr>
+							<td style="width:40px;text-align: right;"><script>dwn(IDC_SETTING_DIALOG_MD_ENABLE);//启用 :</script></td>
+							<td style="width:20px;">
+								<input id="md_chk" type="checkbox" style="margin-top:1px;">
+							</td>
+							<td style="width:50px;text-align: right;">
+								<script>dwn(IDC_SETTING_DIALOG_MD_SENS);//灵敏度 :</script>
+							</td>
+							<td style="width: 150px;">
+								<div id="md_sensi" class="md_sensi">
+									<span class="slider"></span>
+									<span class="value">1</span>
+								</div>
+							</td>
+							<td>
+								<button id="md_clear"><script>dwn(IDC_SETTING_DIALOG_MD_CLEARALL);//清除全部</script></button>
+								<button id="md_enable" style = "visibility:hidden;"></button>
+							</td>
+						</tr>
+					</table>
+					<!--
+					<div class="cover_group_desc">
+						<label>启用 :</label>
+					</div>
+					<div class="cover_group_data" style="border: 1px solid #f00;">
+						<span style="vertical-align: 1px; text-align: center;">
+							<input id="md_chk" type="checkbox" style="margin-top:1px;">
+						</span>
+						<span>灵敏度 :</span>
+						<div class="md_sensi" style="width: 60px; height: 20px; border: 1px solid #f00;">
+							<span class="slider"></span>
+							<span class="value">128</span>
+						</div>
+					</div>
+					-->
+				</div>
+				
+			</div>
+			<!--------------------------md_alarm----------------->
+			<div class="hide local_set">
+				<div class="tittle">
+					<label><script>dwn(IDC_SETTING_DIALOG_LOCAL_TITLE);</script></label>
+				</div>
+				<div id="info">
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_LOCAL_RECORD_FILELEN);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="file_length" type="text" value="1">
+							<span><script>dwn(IDC_GENERAL_FULL_MINUTE);</script></span>
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_LOCAL_STORDIR);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="file_path" type="text" value="C:\IPCamera">
+						</div>
+					</div>
+				</div>
+				<div class="tittle">
+					<label><script>dwn(IDC_SETTING_DIALOG_LOCAL_TITLE_PRERECORD);</script></label>
+				</div>
+				<div id="info">
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_LOCAL_ENABLE);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input id="local_prerecord_chk" type="checkbox">
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_LOCAL_TIME);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="local_prerecord_time" type="text" value="5">
+							<span><script>dwn(IDC_SETTING_DIALOG_LOCAL_PRERECORDLABEL);</script></span>
+						</div>
+					</div>
+				</div>
+				<!---
+				<div class="tittle">
+					<label><script>dwn(IDC_SETTING_DIALOG_LOCAL_LINKRECORD);</script></label>
+				</div>
+				-->
+				<div class="tittle">
+					<label><script>dwn(IDC_SETTING_DIALOG_LOCAL_PLAYPERFORMANCE);</script></label>
+				</div>
+				<div id="info">
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+						<label><script>dwn(IDC_SETTING_DIALOG_LOCAL_PLAYPERFORMANCEOPTION);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<select id = "playperformance" class="sysselect" name = "playperformance">
+								<option value = "1"><script>dwn(IDC_SETTING_DIALOG_LOCAL_NORMAL);</script></option>
+								<option value = "2"><script>dwn(IDC_SETTING_DIALOG_LOCAL_REAL_TIME);</script></option>
+								<option value = "3"><script>dwn(IDC_SETTING_DIALOG_LOCAL_FLUENCY);</script></option>
+							</select>
+						</div>
+					</div>
+				</div>
+				<!---
+				<div id="info">
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_LOCAL_ENABLE);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input id="local_alarm_record_chk" type="checkbox">
+						</div>
+					</div>
+					<div class="sysinfo_row">
+						<div class="sysinfo_desc">
+							<label><script>dwn(IDC_SETTING_DIALOG_LOCAL_ALARM_FILELEN);</script></label>
+						</div>
+						<div class="sysinfo_data">
+							<input class="sysinput" id="local_alarm_record_time" type="text" value="5">
+							<span><script>dwn(IDC_SETTING_DIALOG_LOCAL_FILELEN_LABEL);</script></span>
+						</div>
+					</div>
+				</div>
+				--->
+			</div>
+			<!--------------------local_set----------------------->
+			
+			</div>	
+			<!----right---------->
+		
+		<div class = "pm_footer">
+			<!---<input id = "pm_save_bt" type = "button" value = "Save" />					-->
+		<!--	<input id = "pm_close_bt" type = "button" value = "Close" />-->
+				<!--<input id = "pm_save_bt" type = "button" value = "save"></input>-->
+				<button id = "pm_save_bt"><script>dwn(IDC_GENERAL_SAVE);</script></button>
+		</div>
+		<div class = "pm_footer" style = "top:600px;text-align:center;background-color:transparent;"> 
+			<label>&copy;Shenzhen ChuangWei Safe Co.,Ltd. All Rights Reserved.</label>
+		</div>
+			
+		</div><!-----pm_content-------------->
+		
+	</div>	
+</body>	

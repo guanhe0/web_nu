@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=9;IE=8;IE=EmulateIE7"/>
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+<meta http-equiv="expires" content="Thu, 1 Jan 1970 00:00:01 GMT" />
+<title>IPCamera</title>
+<script type="text/javascript" src="jquery/jquery.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.widget.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.mouse.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.position.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jq.ui.button.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.button.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.resizable.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.draggable.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.dialog.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.slider.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.tabs.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.selectable.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.progressbar.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.datetimepicker.min.js"></script>
+<script type="text/javascript" src="jquery/jquery.bgiframe.min.js"></script>
+<script type="text/javascript" src="jquery/bjqs-1.3.min.js"></script>
+<script type="text/javascript" src="jquery/jquery.json-2.4.min.js"></script>
+<script type="text/javascript" src="jquery/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="jquery/jquery.timer.min.js"></script>
+
+<script type="text/javascript" src="jquery/js.ctrl.video.js"></script>
+<script type="text/javascript" src="jquery/excanvas.compiled.js"></script>
+<script type="text/javascript" src="jquery/draw_div.js"></script>
+<script type="text/javascript" src="jquery/drag_draw.js"></script>
+
+<script type="text/javascript" src="js/general.js"></script>
+<script type="text/javascript" src="js/cmd.js"></script>
+<script type="text/javascript" src="js/player.js"></script>
+
+<script type="text/javascript" src="js/ptz.js"></script>
+
+<script type="text/javascript" src="js/image.js"></script>
+
+<script type="text/javascript" src="js/local_alarm.js"></script>
+
+<script type="text/javascript" src="js/live.js"></script>
+
+<link href="themes/ui-theme.css" rel="stylesheet" />
+<link href="themes/jquery.datetimepicker.css" rel="stylesheet" />
+<!--[if IE 8]>
+<style type="text/css">
+div.opr-menus table td select.txt{
+	top:3px;
+}
+</style>
+<![endif]-->
+<!--[if IE 7]>
+<style type="text/css">
+span.ssp{
+	position:relative;
+	top:-6px;
+}
+</style>
+<![endif]-->
+<!--<link href="themes/jquery-ui.css" rel="stylesheet" />-->
+</head>
+
+<!-- 窗口双击事件 -->
+<script language="javascript" for="IPCamera" event="FireEvent_DblClick(bDblClick)">
+if (g_player) {
+	g_player.fullScreen();
+}
+</script>
+
+<!-- 报警事件 -->
+<script language="javascript" for="IPCamera" event="FireEvent_DevAlarm(pDevIP,lChannelNo,lAlarmType,lAlarmTime,pDevMsg)">
+if (g_player) {
+
+	var JsonObj = {"AlarmType":lAlarmType,"AlarmTime":lAlarmTime};
+	SetAlarmMsgToCookie(JsonObj);
+}
+</script>
+
+<!-- 视频重连 -->
+<script language="javascript" for="IPCamera" event="FirePacketLoss(strDevIP, strDevChn)">
+if (g_player) {
+	var ret = 0;//g_player.isRecording();
+	if (ret.success) {
+		g_player.stopRecord();
+		$(".group .record").parent().removeClass("record_background");
+		if (g_recordTimer) {
+			g_recordTimer.stop();
+			g_recordTimeLeft = 0;
+		}
+	}
+}
+</script>
+
+<!-- Logon事件 -->
+<script language="javascript" for="IPCamera" event="FireLogon(uParam)">
+// 在此处添加事件，防止用户来回切页面时，资源未初始化完成导致的错误.
+//InitDialog();
+if (uParam == 0) {
+	$("#shortcutmenu .playback").click(function() {
+		
+		window.location.href = "/playback.html";
+	});
+}
+else if (uParam == 1) {
+	// 处理重连的事件
+	DealMicroPhone();
+	DealAudioOut();
+}
+
+g_pageInit += 1;
+
+</script>
+
+<!-- 3D定位 -->
+<script language="javascript" for="IPCamera" event="FirePTZ3DChanged(ptX1, ptY1, ptX2, ptY2)">
+	var msgBody = {
+		ChannelID: 0,
+		ControlType: 3,
+		PosX1: parseInt(ptX1),
+		PosY1: parseInt(ptY1),
+		PosX2: parseInt(ptX2),
+		PosY2: parseInt(ptY2)
+	};
+
+	$.sendCmd("CW_JSON_CallPtz3D", msgBody).done(function () {
+	});
+</script>
+
+<!-- 3D ptz -->
+<script language="javascript" for="IPCamera" event="FireClickChanged(cmdType,nSpeed)">
+
+	PTZCmd(cmdType);
+</script>
+<!-- wheel zoom -->
+<script language="javascript" for="IPCamera" event="FireMouseWheelChanged(nStart, zDelta)">
+	var control;
+	if (nStart == 0)
+	{
+	   control = 2;
+	}
+	else if (zDelta == 1)
+	{
+	   control = 0;
+	}
+	else
+	{
+	   control = 1;
+	}
+	var msgBody = {
+		ChannelID: 0,
+		ZoomModel: control
+	};
+
+	$.sendCmd("CW_JSON_SetCameraZoom", msgBody).done(function () {
+	});
+</script>
+<script language = "javascript">
+function live_play_resize(){
+	var newWidth = parseInt($("#player").width()),newHeight = parseInt($("#player").height());
+	var player_obj = $("#player").find("object")[0];
+	
+	player_obj.width = newWidth;
+	player_obj.height = newHeight;
+}
+</script>
+
+<body class="ui-helper-reset" onresize = "live_play_resize();">
+	<div class="loading">
+		<img src="themes/images/loading.gif">
+	</div>
+	<div class="body hide">
+		<div class="header">
+			<div class="headcontain">
+				<div class="containleft">
+					<div class="logo">
+						<img src="themes/images/logo.png">
+					</div>
+				</div>
+				<div class="containright contain-live">
+					<div class="left">
+						<div class="info device">
+							<span id="deviceInfo"></span>
+						</div>
+						<div class="info user">
+							<span id="deviceUser"></span>
+						</div>
+					</div>
+					<div class="right ul-live">
+						<ul class="ui-helper-reset" id="shortcutmenu">
+							<li>
+								<span class="setting"><script>dwn(IDC_LIVE_SETTING);</script></span>
+							</li>
+							<li>
+								<span class="playback"><script>dwn(IDC_LIVE_PLAYBACK);</script></span>
+							</li>
+							<li>
+								<span class="logout"><script>dwn(IDC_LIVE_EXIT);</script></span>
+							</li>
+							<li class="alarm_panel">
+								<div id="alarm_panel_content" style="">
+									<span id="alarm_no_flag"><script>dwn(IDC_LIVE_VIEW_ALARM);//查看报警</script></span>
+									<img id="alarm_red_flag" src="themes/images/AnimationAlarm.gif" width="80" height="57" style="display:none;"/>
+								</div>
+							</li>
+						</ul>
+					</div>
+					<div class="clear"></div>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</div>
+		<div class="content">
+			<div class="main">
+				<div id="player"></div>
+			</div>
+			<div class="slider_menu left show_width">
+				<div class="ptz_container">
+					<div class="ptz" id = "ptz_id">
+						<div class="direction up"></div>
+						<div class="direction down"></div>
+						<div class="direction left"></div>
+						<div class="direction right"></div>
+						<div class="direction middle" id = "direction_middle"></div>
+						<div class="direction l-u"></div>
+						<div class="direction r-u"></div>
+						<div class="direction l-d"></div>
+						<div class="direction r-d"></div>
+					</div>
+					<div class="ptz_image opr-menus">
+						<table cellpadding="0" cellspacing="0" border="0" width="100%">
+							<tr>
+								<td class="label">
+									<input type="button" id="focus_btn_plus" class="opr opr-focus-plus">
+								</td>
+								<td class="label">
+									<input type="button" id="focus_btn_reduce" class="opr opr-focus-reduce">
+								</td>
+							</tr>
+							<tr>
+								<td class="label">
+									<input type="button" id="zoom_btn_plus" class="opr opr-zoom-plus">
+								</td>
+								<td class="label">
+									<input type="button" id="zoom_btn_reduce" class="opr opr-zoom-reduce">
+								</td>
+							</tr>
+							<tr>
+								<td class="label">
+									<input type="button" id="aperture_btn_plus" class="opr opr-aperture-plus">
+								</td>
+								<td class="label">
+									<input type="button" id="aperture_btn_reduce" class="opr opr-aperture-reduce">
+								</td>
+							</tr>
+						</table>
+					</div>
+					<div class="speed" style="#line-height: 20px;">
+						<span style="font-size:12px; padding-left: 10px; #line-height: 14px;"><script>dwn(IDC_LIVE_PTZ_SPEED);//控制速度</script></span>
+						<span class="slider" style="width:140px;#vertical-align:middle;"></span>
+						<span class="value" style="#line-height: 20px;">
+						</span>
+					</div>
+				</div>
+				<div id="live_sly_container" class="sly_container">
+					<div id="sly_menu">
+						<div class="hy-tabs" id="vedio_param" style="border:none; background: none;">
+							<ul>
+								<li class="active" tabpanel="image_param_1" id="image_tab"><script>dwn(IDC_LIVE_TAB_IMAGE);//图像设置</script></li>
+								<li tabpanel="image_param_2" id="ptz_tab"><script>dwn(IDC_LIVE_TAB_PTZ);//云台设置</script></li>
+							</ul>
+							<div class="tab-panel" id="image_param_1">
+								<div class="menu_contain">
+									
+									<div class="menu_group">
+										<div class="menu_desc">
+											<input type="button" disabled="disabled" class="opr opr_bright">
+										</div>
+										<div class="menu_data">
+											<div class="bright image_color">
+												<span class="slider"></span>
+												<span class="value">128</span>
+											</div>
+										</div>
+									</div>
+									<div class="menu_group">
+										<div class="menu_desc">
+											<input type="button" disabled="disabled"  class="opr opr_hue">
+										</div>
+										<div class="menu_data">
+											<div class="hue image_color">
+												<span class="slider"></span>
+												<span class="value">128</span>
+											</div>
+										</div>
+									</div>
+									<div class="menu_group">
+										<div class="menu_desc">
+											<input type="button" disabled="disabled" class="opr opr_contrast">
+										</div>
+										<div class="menu_data">
+											<div class="contrast image_color">
+												<span class="slider"></span>
+												<span class="value">128</span>
+											</div>
+										</div>
+									</div>
+									<div class="menu_group">
+										<div class="menu_desc">
+											<input type="button" disabled="disabled" class="opr opr_saturation">
+										</div>
+										<div class="menu_data">
+											<div class="saturation image_color">
+												<span class="slider"></span>
+												<span class="value">128</span>
+											</div>
+										</div>
+									</div>
+									<div class="menu_group">
+										<div class="menu_desc">
+											<input type="button" disabled="disabled" class="opr opr_sharpness">
+										</div>
+										<div class="menu_data">
+											<div class="sharpness image_color">
+												<span class="slider"></span>
+												<span class="value">128</span>
+											</div>
+										</div>
+									</div>
+									<div class="menu_group">
+										<button type="button" class="ui-button ui-widget ui-state-default ui-corner-all" role="button" id="image_default" style="margin-left: 170px;"><script>dwn(IDC_LIVE_IMAGE_DEFAULT);//默认设置</script></button>
+									</div>
+									<div class="opr-menus">
+										<table class="opr-menus-tab" cellpadding="0" cellspacing="0" border="0" width="100%">
+											<tr>
+												<td class="label" colspan="2" style="border-top: 1px solid #CCC; padding-top: 5px;">
+													<span style="margin-left: 0px;">
+														<script>dwn(IDC_LIVE_IMAGE_FLIP);//图像翻转</script>
+													</span>
+													<span>
+														<input type="button" id="image_turn_ver" class="opr opr-txfz-lr" />
+														<input type="button" id="image_turn_hor_ver" class="opr opr-txfz-ud" />
+													</span>
+													<span style="margin-left: 22px;">
+														<script>dwn(IDC_LIVE_BLC);//背光补偿</script>
+													</span>
+													<span>
+														<input type="button" id="backlight_btn" class="opr opr-close" />
+													</span>
+												</td>
+											</tr>
+											<tr>
+												<td class="label" style="padding-left: 5px; padding-top:6px; padding-bottom: 5px; border-bottom: 1px solid #CCC;" colspan="2">
+													<span class="ssp"><script>dwn(IDC_LIVE_WDR);//宽动态</script></span><input type="button" id="wide_dyn_btn" class="opr opr-open" />
+													&nbsp;<span class="ssp"><script>dwn(IDC_LIVE_LOWLUX);//低照度</script></span><input type="button" id="lum_btn" class="opr opr-open"/>
+													&nbsp;<span class="ssp"><script>dwn(IDC_LIVE_3DDENOISE);//3D 降噪</script></span><input type="button" class="opr opr-open" id="filter3d_btn" />
+												</td>
+											</tr>
+											<tr>
+												<td class="label" colspan="2">
+													<script>dwn(IDC_LIVE_DAYNIGHTMODE);//日夜模式</script>
+												</td>
+											</tr>
+											<tr>
+												<td class="label" colspan="2" style="padding-bottom: 5px;">
+													<span style="">
+														<input type="button" id="day2night_day" class="opr opr-day opr-ative" />
+														<input type="button" id="day2night_night" class="opr opr-night" />
+														<input type="button" id="day2night_auto" class="opr opr-auto" />
+													</span>
+												</td>
+											</tr>
+											<!--
+											<tr>
+												<td class="label" colspan="2" style="padding-bottom: 5px;">
+													光敏阀值
+												</td>
+											</tr>
+											-->
+											<tr>
+												<td class="label" colspan="2" style="padding-bottom: 5px; border-bottom: 1px solid #CCC;">
+													<span class="ssp"><script>dwn(IDC_LIVE_DAYTONIGHT1);//彩转黑</script></script></span>
+													
+													<span class="text" style="#top:-4px;">
+														<input type="text" class="txt" id="day2night_threshold" onkeydown = "onlyNum();" style="width:30px; #top:-2px;">
+														<input type="button" class="opr opr-high" id="day2night_threshold_up">
+														<input type="button" class="opr opr-lower" id="day2night_threshold_down">
+													</span>
+													<span class="ssp" style="margin-left: 40px;"><script>dwn(IDC_LIVE_NIGHTTODAY1)//黑转彩</script></span>
+													<span class="text" style="#top:-4px;">
+														<input type="text" class="txt" id="night2day_threshold" onkeydown = "onlyNum();" style="width:30px; #top:-2px;">
+														<input type="button" class="opr opr-high" id="night2day_threshold_up">
+														<input type="button" class="opr opr-lower" id="night2day_threshold_down">
+													</span>
+												</td>
+											</tr>
+											
+											<tr id="white_balance_handle" class="hide">
+												<td colspan="2" style="padding-top:8px; #padding-top:8px;">
+													<span style="position: relative;margin-left:4px;">R</span>
+													<span class="text">
+														<input type="text" class="txt" id="white_balance_R" onkeydown = "onlyNum();" style="width:30px; top:-2px;">
+														<input type="button" class="opr opr-high" id="white_balance_R_up">
+														<input type="button" class="opr opr-lower" id="white_balance_R_down">
+													</span>
+													<span style="position: relative;margin-left:20px;">G</span>
+													<span class="text">
+														<input type="text" class="txt" id="white_balance_G" onkeydown = "onlyNum();" style="width:30px; top:-2px;">
+														<input type="button" class="opr opr-high" id="white_balance_G_up" style="right:-14px;">
+														<input type="button" class="opr opr-lower" id="white_balance_G_down" style="right:-14px;">
+													</span>
+													<span style="position: relative;margin-left:20px;">B</span>
+													<span class="text">
+														<input type="text" class="txt" id="white_balance_B" onkeydown = "onlyNum();" style="width:30px; top:-2px;">
+														<input type="button" class="opr opr-high" id="white_balance_B_up" style="right:-18px;">
+														<input type="button" class="opr opr-lower" id="white_balance_B_down" style="right:-18px;">
+													</span>
+												</td>
+											</tr>
+											<tr>
+												<td class="label" style="padding-top:12px; padding-top:5px\9;">
+													<span><script>dwn(IDC_LIVE_AWBMODE);//白平衡模式</script></span>
+												</td>	
+												<td style="padding-top:12px; padding-bottom: 3px; padding-top:5px\9;">
+													<span class="text">
+														<select id="white_balance_sel" class="txt" style="width:120px;">
+															<option value="0"><script>dwn(IDC_LIVE_AWBMODE_AUTO);//自动</script></option>
+															<option value="1"><script>dwn(IDC_LIVE_AWBMODE_WHITEGLOWLAMP);//白炽灯</script></option>
+															<option value="2"><script>dwn(IDC_LIVE_AWBMODE_4000K);//4000K色温</script></option>
+															<option value="3"><script>dwn(IDC_LIVE_AWBMODE_5000K);//5000K色温</script></option>
+															<option value="4"><script>dwn(IDC_LIVE_AWBMODE_SUNSHINE);//阳光</script></option>
+															<option value="5"><script>dwn(IDC_LIVE_AWBMODE_DARKCLOUDS);//乌云</script></option>
+															<option value="6"><script>dwn(IDC_LIVE_AWBMODE_FLASHLIGHT);//闪光灯</script></option>
+															<option value="7"><script>dwn(IDC_LIVE_AWBMODE_FLUORESCENTLAMP);//荧光灯</script></option>
+															<option value="8"><script>dwn(IDC_LIVE_AWBMODE_HIGH_FLUORESCENTLAMP);//高亮荧光灯</script></option>
+															<option value="9"><script>dwn(IDC_LIVE_AWBMODE_WATERBOTTOM);//水底</script></option>
+															<option value="10"><script>dwn(IDC_LIVE_AWBMODE_CUSTOMIZED);//用户自定义</script></option>
+														</select>
+													</span>
+													
+												</td>
+											</tr>
+											<tr>
+												<td class="label" style="padding-top: 8px;">
+													<span><script>dwn(IDC_LIVE_METERMODE);//测光模式</script></span>
+												</td>
+												<td>
+													<span class="text">
+														<select id="videoinputrate" class="txt" style="width:120px;">
+															<option value="0"><script>dwn(IDC_IMAGE_HERTA_50);//点测光</script></option>
+															<option value="1"><script>dwn(IDC_IMAGE_HERTA_60);//中心测光</script></option>
+														</select>
+													</span>
+												</td>
+											</tr>
+											<tr>
+												<td class="label" style="padding-top: 8px;">
+													<span><script>dwn(IDC_LIVE_EV);//曝光补偿</script></span>
+												</td>
+												<td>
+													<span class="text">
+														<select id="evcomp_sel" class="txt" style="width:120px;">
+															<option value="0">-6/3</option>
+															<option value="1">-5/3</option>
+															<option value="2">-4/3</option>
+															<option value="3">-3/3</option>
+															<option value="4">-2/3</option>
+															<option value="5">-1/3</option>
+															<option value="6">0</option>
+															<option value="7">1/3</option>
+															<option value="8">2/3</option>
+															<option value="9">3/3</option>
+															<option value="10">4/3</option>
+															<option value="11">5/3</option>
+															<option value="12">6/3</option>
+														</select>
+													</span>
+												</td>
+											</tr>
+											<tr>
+												<td class="label" style="padding-top: 8px;">
+													<span><script>dwn(IDC_LIVE_EXPOSUREMODE);//曝光模式</script></span>
+												</td>
+												<td>
+													<span class="text">
+														<select id="exposuremodes" class="txt" style="width:120px;">
+															<option value="0"><script>dwn(IDC_LIVE_EXPOSUREMODE_AUTO);//自动</script></option>
+															<option value="1"><script>dwn(IDC_LIVE_EXPOSUREMODE_HANDLE);//手动</script></option>
+														</select>
+													</span>
+												</td>
+											</tr>
+										</table>
+										<table id="exposure_auto" class="opr-menus-tab hide" cellpadding="0" cellspacing="0" border="0" width="100%">
+											<tr>
+												<td class="label" style="padding-top: 8px;">
+													<span><script>dwn(IDC_LIVE_SHUTTER);//快门</script></span>
+												</td>
+												<td>
+													<span class="text">
+														<select id="shutter_sel" class="txt" style="width:120px;">
+															<option value="0">1/5</option>
+															<option value="1">1/10</option>
+															<option value="2">1/15</option>
+															<option value="3">1/20</option>
+															<option value="4">1/25</option>
+															<option value="5">1/30</option>
+															<option value="6">1/50</option>
+															<option value="7">1/60</option>
+															<option value="8">1/100</option>
+															<option value="9">1/120</option>
+															<option value="10">1/250</option>
+															<option value="11">1/500</option>
+															<option value="12">1/1000</option>
+															<option value="13">1/2000</option>
+															<option value="14">1/5000</option>
+														</select>
+													</span>
+												</td>
+											</tr>
+											<tr>
+												<td class="label" style="padding-top: 8px;">
+													<span><script>dwn(IDC_LIVE_GAIN);//增益</script></span>
+												</td>
+												<td>
+													<span class="text">
+														<select id="gain_sel" class="txt" style="width:120px;">
+															<option value="0">100</option>
+															<option value="1">150</option>
+															<option value="2">200</option>
+															<option value="3">300</option>
+															<option value="4">400</option>
+															<option value="5">600</option>
+															<option value="6">800</option>
+															<option value="7">1600</option>
+															<option value="8">3200</option>
+															<option value="9">6400</option>
+															<option value="10">12800</option>
+															<option value="11">25600</option>
+															<option value="12">51200</option>
+															<option value="13">102400</option>
+														</select>
+													</span>
+												</td>
+											</tr>
+										</table>
+										<table id="exposure_handle" class="opr-menus-tab hide" cellpadding="0" cellspacing="0" border="0" width="100%">
+											<tr>
+												<td class="label" style="padding-top: 8px;">
+													<span><script>dwn(IDC_LIVE_MAXSHUTTER);//最大快门</script></span>
+												</td>
+												<td>
+													<span class="text">
+														<select id="max_shutter_sel" class="txt" style="width:120px;">
+															<option value="0">1/5</option>
+															<option value="1">1/10</option>
+															<option value="2">1/15</option>
+															<option value="3">1/20</option>
+															<option value="4">1/25</option>
+															<option value="5">1/30</option>
+															<option value="6">1/50</option>
+															<option value="7">1/60</option>
+															<option value="8">1/100</option>
+															<option value="9">1/120</option>
+															<option value="10">1/250</option>
+															<option value="11">1/500</option>
+															<option value="12">1/1000</option>
+															<option value="13">1/2000</option>
+															<option value="14">1/5000</option>
+														</select>
+													</span>
+												</td>
+											</tr>
+											<tr>
+												<td class="label" style="padding-top: 8px;">
+													<span><script>dwn(IDC_LIVE_MINSHUTTER);//最小快门</script></span>
+												</td>
+												<td>
+													<span class="text">
+														<select id="min_shutter_sel" class="txt" style="width:120px;">
+															<option value="0">1/5</option>
+															<option value="1">1/10</option>
+															<option value="2">1/15</option>
+															<option value="3">1/20</option>
+															<option value="4">1/25</option>
+															<option value="5">1/30</option>
+															<option value="6">1/50</option>
+															<option value="7">1/60</option>
+															<option value="8">1/100</option>
+															<option value="9">1/120</option>
+															<option value="10">1/250</option>
+															<option value="11">1/500</option>
+															<option value="12">1/1000</option>
+															<option value="13">1/2000</option>
+															<option value="14">1/5000</option>
+														</select>
+													</span>
+												</td>
+											</tr>
+											<tr>
+												<td class="label" style="padding-top: 8px;">
+													<span><script>dwn(IDC_LIVE_MAXGAIN);//最大增益</script></span>
+												</td>
+												<td>
+													<span class="text">
+														<select id="max_gain_sel" class="txt" style="width:120px;">
+															<option value="0">100</option>
+															<option value="1">150</option>
+															<option value="2">200</option>
+															<option value="3">300</option>
+															<option value="4">400</option>
+															<option value="5">600</option>
+															<option value="6">800</option>
+															<option value="7">1600</option>
+															<option value="8">3200</option>
+															<option value="9">6400</option>
+															<option value="10">12800</option>
+															<option value="11">25600</option>
+															<option value="12">51200</option>
+															<option value="13">102400</option>
+														</select>
+													</span>
+												</td>
+											</tr>
+											
+											
+										</table>
+										<!-- 参数改变时显示 -->
+										<table class="opr-menus-tab" cellpadding="0" cellspacing="0" border="0" width="100%">
+											<tr>
+												<td id="save_param_btn" class="label" style="padding-top:3px; padding-top:5px\9;">
+													<span><script>dwn(IDC_LIVE_SAVE);//保存修改&nbsp;&nbsp;</script></span>
+													<input type="button" id="white_balance_btn" class="opr opr-save btn7" />
+												</td>
+												<td id="save_success_msg" class="label hide">
+													修改成功！
+												</td>
+											</tr>
+										</table>
+										<!-- 参数改变时显示 -->
+									</div>
+								</div>
+							</div>
+							<div  class="tab-panel" id="image_param_2">
+								<div class="menu_contain">
+									<div class="opr-menus">
+										<table class="opr-menus-tab" cellpadding="0" cellspacing="0" border="0" width="100%">
+											
+											<tr>
+												<td class="label" colspan="2"><script>dwn(IDC_LIVE_AREASCAN);//区域扫描</script></td>
+											</tr>
+											<tr>
+												<td colspan="2" style="border-bottom: 1px solid #CCC; padding-bottom: 10px;">
+													
+													<input type="button" id="area_left_btn" class="opr opr-spxw-01" />
+													<input type="button" id="area_right_btn" class="opr opr-spxw-02" />
+													<input type="button" id="invoke_area_btn" class="opr opr-import" />
+												
+													<select id = "scan_mode_sel" style = "width:122px;" class = "scan_mode_txt">
+														<option value = "0"><script>dwn(IDC_LIVE_SMALL_RADIAN);</script></option>
+														<option value = "1"><script>dwn(IDC_LIVE_BIG_RADIAN);</script></option>
+													</select>													
+												</td>
+											</tr>
+											<tr>
+												<td class="label" colspan="2" style="padding-top: 10px;">
+													&nbsp;&nbsp;<script>dwn(IDC_LIVE_PTZWATCH);//看守位</script>
+													<input type="button" id="watch_btn" class="opr opr-save" />
+												</td>
+											</tr>
+											<tr>
+												<td colspan="2" class="label" style="padding-top: 5px;#padding-top:10px; border-bottom: 1px solid #CCC; padding-bottom: 10px;">
+													<span><script>dwn(IDC_LIVE_IDLETIME);//空闲时间</script></span>
+													<span class="text" style="position:relative; margin-right: 20px;">
+														<input type="text" id="watch_time_text" class="txt" style="width:30px;"/>
+														<span><script>dwn(IDC_LVIE_SECOND);//秒</script></span>
+														<select id="watch_mode_sel" class="txt" style="width:60px;">
+															<option value="0"><script>dwn(IDC_LIVE_PTZWATCH_CLOSE);//关闭</script></option>
+															<option value="1"><script>dwn(IDC_LIVE_PTZWATCH_PRESET);//预置点</script></option>
+															<option value="2"><script>dwn(IDC_LIVE_PTZWATCH_CRZ);//巡航</script></option>
+															<option value="3"><script>dwn(IDC_LIVE_PTZWATCH_PATTERN);//花样扫描</script></option>
+															<option value="4"><script>dwn(IDC_LIVE_PTZWATCH_AREA);//区域扫描</script></option>
+														</select>
+														<select id="watch_task" class="txt" style="width:60px;">
+														</select>
+													</span>
+												</td>
+											</tr>
+											<tr>
+												<td class="label" colspan="2" style="padding-top: 10px;"><script>dwn(IDC_LIVE_PRESET);//预置位</script></td>
+											</tr>
+											<tr>
+												<td colspan="2">
+													<span class="text" style="#position:relative;#top:-4px; margin-right: 20px;">
+														<select id="preset_sel_id" class="txt" style="width:60px;">
+														</select>
+														<input type="text" id="preset_text_name" class="txt" />
+													</span>
+													
+													<input type="button" id="add_preset_btn" class="opr opr-save" />
+													<input type="button" id="del_preset_btn" class="opr opr-remove" />
+													<input type="button" id="invoke_preset_btn" class="opr opr-import" />
+												</td>
+											</tr>
+											<tr><td colspan="2">&nbsp;</td></tr>
+											<tr>
+												<td class="label" colspan="2"><script>dwn(IDC_LIVE_PATTERNSCAN);//花样扫描</script></td>
+											</tr>
+											<tr>
+												<td colspan="2">
+													<span class="text" style="position:relative; margin-right: 20px;">
+														<select id="pattern_sel" class="txt" style="width:60px;">
+															<option value="1">1</option>
+															<option value="2">2</option>
+															<option value="3">3</option>
+															<option value="4">4</option>
+														</select>
+														<input type="text" id="pattern_name" class="txt" />
+													</span>
+													
+													<input type="button" id="pattern_record" class="opr opr-sxj-02 btn7" />
+													<input type="button" id="pattern_stop" class="opr opr-sxj-01 btn7" />
+													<input type="button" id="invoke_pattern" class="opr opr-import btn7" />
+												</td>
+											</tr>
+											<tr><td colspan="2">&nbsp;</td></tr>
+											<tr>
+												<td class="label" colspan="2"><span><script>dwn(IDC_LIVE_CRZ);</script></span></td>
+											</tr>
+											<tr>
+												<td colspan="2" style="padding-top:4px; vertical-align: top;">
+													<span class="text" style="position:relative; margin-right: 41px; #top:-3px;">
+														<select id="tour_sel" class="txt" style="width:60px;">
+															<option value="1">1</option>
+															<option value="2">2</option>
+															<option value="3">3</option>
+															<option value="4">4</option>
+														</select>
+													</span>
+													<input type="button" id="save_tour_btn" class="opr opr-save">
+													<input type="button" id="add_tour_btn" class="opr opr-add" />
+													<input type="button" id="del_tour_btn" class="opr opr-remove" />
+													<input type="button" id="invoke_tour_btn" class="opr opr-import" />
+												</td>
+											</tr>
+											<tr>
+												<td colspan="2" class="label">
+													<table cellpadding="0" cellspacing="0" border="1" width="234px" id="tour_table">
+														<tr>
+															<td><script>dwn(IDC_LIVE_TOURPRESET);//预置点</script></td>
+															<td><script>dwn(IDC_LIVE_DELAYTIME);//停留时间(秒)</script></td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+											
+										</table>
+									</div>
+									<div class="hide clear" id="addtourdialog">
+										<div class="add_user_group">
+											<div class="user_group_desc">
+												<label><script>dwn(IDC_LIVE_TOURPRESET);//预置点</script></label>
+											</div>
+											<div class="user_group_data">
+												<select id="dialog_tour_presetid" class="sysselect">
+												</select>
+											</div>
+										</div>
+										<div class="add_user_group">
+											<div class="user_group_desc">
+												<label><script>dwn(IDC_LIVE_DELAYTIME1);//停留时间</script></label>
+											</div>
+											<div class="user_group_data" style = "width:230px;">
+												<input type="text" id="dialog_tour_time" class="sysinput" style="width:146px;" >
+												<span>(2-255)<script>dwn(IDC_GENERAL_SECOND_S);</script></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							
+							</div>
+						</div>
+					
+					</div>
+				</div>
+				<div class="handle_bar">
+					<div class="handle">
+						<span class="left"></span>
+					</div>
+				</div>
+			</div>
+			<div class="function">
+					<div class="stream1">
+					<button id="master_btn" class="hw-btn-active">
+						<script>dwn(IDC_LIVE_MASTER_STREAM);</script>
+					</button>
+					<button id="slave_btn" class = "slave_btn">
+						<script>dwn(IDC_LIVE_SLAVE_STREAM);</script>
+					</button>
+					</div>
+				<div class="microphone">
+					<span class="icon open"></span>
+					<span class="slider"></span>
+				</div>
+				<!--				
+				<div class="play_and_pause pausing">
+				</div>
+				-->
+				<div class="volume">
+					<span class="icon high"></span>
+					<span class="slider"></span>
+				</div>
+				<div class="group" style="min-width:130px;">
+					<div class="icon_block">
+						<span class="ptz3d ptz3d_background"></span>
+					</div>
+					<div class="icon_block">
+						<span class="record_toggle record"></span>
+					</div>
+					<div class="icon_block">
+						<span class="full_screen"></span>
+					</div>
+					<div class="icon_block">
+						<span class="screenshot"></span>
+					</div>
+					<div class="icon_block">
+						<span class="slider_toggle slider_left"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="hide clear" id="msgLogout">
+		<span><script>dwn(IDC_GENERAL_EXIT);</script></span>
+	</div>
+	<div class="hide clear" id="msgImageSetting">
+
+	</div>
+	
+	<div class="hide clear" id="alarm_dialog">
+		<div style="padding:10px;">
+			<table class="thead" cellpadding="0" cellspacing="0" border="0" width="100%">
+				<thead>
+					<tr>
+						<th style="width:100px;"><script>dwn(IDC_LIVE_ALARM_TYPE);//报警类型</script></th><th style="width:200px;"><script>dwn(IDC_LIVE_ALARM_TIME);//报警时间</script></th>
+					</tr>
+				</thead>
+			</table>
+			<div class="tbody">
+				<table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-height:100px;" id="alarm_msg_table">
+				<tbody>
+				</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

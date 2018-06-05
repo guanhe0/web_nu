@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="pragma" content="no-cache" />
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate" />
+<meta http-equiv="expires" content="Thu, 1 Jan 1970 00:00:01 GMT" />
+<title>PlayBack</title>
+<script type="text/javascript" src="jquery/jquery.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.core.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.widget.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.mouse.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.position.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jq.ui.button.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.slider.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.datetimepicker.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.button.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.resizable.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.draggable.min.js"></script>
+<script type="text/javascript" src="uiWidgets/jquery.ui.dialog.min.js"></script>
+<script type="text/javascript" src="jquery/jquery.bgiframe.min.js"></script>
+<script type="text/javascript" src="jquery/jquery.json-2.4.min.js"></script>
+<script type="text/javascript" src="jquery/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="jquery/jquery.timer.min.js"></script>
+<script type="text/javascript" src="js/general.js"></script>
+<script type="text/javascript" src="js/cmd.js"></script>
+<script type="text/javascript" src="js/play_back.js"></script>
+<script type="text/javascript" src="js/playback.js"></script>
+<link href="themes/ui-theme.css" rel="stylesheet" />
+<link href="themes/jquery.datetimepicker.css" rel="stylesheet" />
+</head>
+
+<script language="javascript" for="PlayBack" event="FireEvent_SearchFile(pFile)">
+var aFile = pFile.split("\\");
+$('<option type="local" value="' + pFile + '">' + aFile[aFile.length-1] + '</option>').appendTo($('#file_list'));
+</script>
+
+<script language="javascript" for="PlayBack" event="FireEvent_SearchFileState(lSearchState)">
+if(lSearchState == 0){
+g_search_flag = 0;
+}
+else
+{
+g_search_flag = 1;
+}
+</script>
+
+<!-- 切换通道事件 -->
+<script language="javascript" for="PlayBack" event="FireEvent_ClickWndIndex(lWndNo)">
+if (g_playBack) {
+	g_playBack.setCurWnd(lWndNo);
+	UpdateSlider();
+	// 切换图标
+	var wndAttr = g_playBack.getSelWndAttr();
+	if (wndAttr.played == 0) {
+		// 暂停
+		$(".function .play_or_pause").removeClass("pausing").addClass("playing").attr("title", IDC_PLAYBACK_PLAY);
+	} else if (wndAttr.played == 1) {
+		// 播放
+		$(".function .play_or_pause").removeClass("playing").addClass("pausing").attr("title", IDC_PLAYBACK_PAUSE);
+	}
+}
+</script>
+
+<!-- 文件播放结束事件 -->
+<script language="javascript" for="PlayBack" event="FireFileEnd(nChannelIndex)">
+if (g_playBack) {
+	g_playBack.clearWndAttr(nChannelIndex);
+}
+</script>
+
+<body class="ui-helper-reset">
+	<div class="loading">
+		<img src="themes/images/loading.gif">
+	</div>
+	<div class="body hide">
+		<div class="header">
+			<div class="headcontain">
+				<div class="containleft">
+					<div class="logo">
+						<img src="themes/images/logo.png">
+					</div>
+				</div>
+				<div class="containright contain-playback">
+					<div class="left">
+						<div class="info device">
+							<span id="deviceInfo"></span>
+						</div>
+						<div class="info user">
+							<span id="deviceUser"></span>
+						</div>
+					</div>
+					<div class="right ul-playback">
+						<ul class="ui-helper-reset" id="shortcutmenu">
+							<li>
+								<span class="playlive"><script>dwn(IDC_LIVE_VIDEO);</script></span>
+							</li>
+							<li>
+								<span class="logout"><script>dwn(IDC_LIVE_EXIT);</script></span>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="content">
+			<div class="main">
+				<div id="play_back"></div>
+				<div class="search left show_width">
+					<div class="title">
+						<script>dwn(IDC_PLAYBACK_SEARCHVIDEO);</script>
+					</div>
+					<div class="control-group">
+						<label class="control-label"><script>dwn(IDC_PLAYBACK_STARTTIME);</script></label>
+						<input type="text" id="video_begin_time" class="control_option">
+						<input type="text" id="video_begin_hour" value="00" class="control_option">
+						<label>:</label>
+						<input type="text" id="video_begin_minute" value="00" class="control_option">
+						<label>:</label>
+						<input type="text" id="video_begin_second" value="00" class="control_option">
+					</div>
+					<div class="control-group">
+						<label class="control-label"><script>dwn(IDC_PLAYBACK_ENDTIME);</script></label>
+						<input type="text" id="video_end_time" class="control_option">
+						<input type="text" id="video_end_hour" value="23" class="control_option">
+						<label>:</label>
+						<input type="text" id="video_end_minute" value="59" class="control_option">
+						<label>:</label>
+						<input type="text" id="video_end_second" value="59" class="control_option">
+					</div>
+					<div class="control-group">
+						<label class="control-label"><script>dwn(IDC_PLAYBACK_RECORDTYPE);</script></label>
+						<select class="control_option" id="video_type">
+							<option value="0"><script>dwn(IDC_PLAYBACK_LOCALVIDEO);</script></option>
+							<option value="1"><script>dwn(IDC_PLAYBACK_DEVICEVIDEO);</script></option>
+						</select>
+						<button id="search_btn"><script>dwn(IDC_PLAYBACK_SEARCHBTN);</script></button>
+					</div>
+					<div id="file_list_panel">
+						<select id="file_list" size="3">
+						</select>
+					</div>
+					<!--
+					<div class="handle_bar">
+						<div class="handle">
+							<span class="left"></span>
+						</div>
+					</div>	
+					-->
+				</div>				
+			</div>
+			<div class="function">
+				<div id="timeline" style="top:-10px;left:-3px;">
+				</div>
+				<div class="span_time">
+					<span id="start_times">00:00:00</span>
+					<span>/</span>
+					<span id="end_times">00:00:00</span>
+				</div>
+				<span class="playback_decelerate">
+					<img src="themes/images/rewind.png">
+				</span>
+				<div class="play_or_pause pausing">
+				</div>
+				<span class="playback_accelerate">
+					<img src="themes/images/fastforward.png">
+				</span>
+				<div class = "playbackrate">
+					<span id = "playbackrate" class = "playbackrate_fontsize">1x</span>
+				</div>
+				<!--
+				<div class="playback_volume">
+					<span class="icon"></span>
+					<span class="slider"></span>
+					<span class="value">0</span>
+				</div>
+			    -->
+				<div class="function_group">
+					<span id="open_file"><!--class="playbackcontian">-->
+						<img src="themes/images/list.png">
+						<!--<input type="file" name="fileField" id="open_file" class="playbackscanfile" id="fileField"  onchange='OpenLocalFile({"name":this.value})'/>-->
+						</span>
+					<!--<input type="file" id="open_file" class="playbackscanfile" id="fileField" size="28" onchange="g_playBack.PlayFile(this.value)"/>--->
+					
+					<!--<input id="open_file" type = "file" class = "playbackopenfile"/>-->
+					<span id="snaps">
+						<img src="themes/images/screenshot.png">
+					</span>
+					<!--
+					<span id="btn-toggleside_playback" class="silder_toggle_playback slider_left_playback">
+					</span>
+					-->
+				</div>
+			</div>
+		</div>
+		<div class="hide clear" id="msgLogout">
+			<span><script>dwn(IDC_GENERAL_EXIT);</script></span>
+		</div>
+	</div>
+</body>
+
+</html>
